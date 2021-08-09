@@ -1,0 +1,9 @@
+{% if groups.get('ceph') %}
+scrape_configs:
+  - job_name: ceph_nodeexporter
+    static_configs:
+      - targets:
+{% for host in groups['ceph'] %}
+        - "{{ admin_oc_net_name | net_ip(host) }}:9100"
+{% endfor %}
+{% endif %}

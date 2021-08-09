@@ -1,0 +1,10 @@
+{% if groups.get('mons') %}
+scrape_configs:
+  - job_name: ceph
+    static_configs:
+      - targets:
+{% for host in groups['mons'] %}
+        - "{{ admin_oc_net_name | net_ip(host) }}:9283"
+{% endfor %}
+    scrape_interval: 15s
+{% endif %}
