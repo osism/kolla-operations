@@ -1,0 +1,13 @@
+{% raw %}
+scrape_configs:
+  - job_name: fluentd
+    static_configs:
+{% for host in (groups['control'] + groups['compute'] + groups['monitoring']) %}
+      - targets:
+          - "{{ 'api' | kolla_address(host) | put_address_in_context('url') }}:24224"
+        labels:
+          server: '{{ host }}'
+{% endfor %}
+    scrape_interval: 1m
+    scrape_timeout: 30s
+{% endraw %}

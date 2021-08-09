@@ -1,0 +1,34 @@
+---
+# TODO: don't put it here for kayobe
+kolla_enable_central_logging: True
+enable_prometheus_server: True
+kolla_enable_grafana: True
+
+# Allow Elasticsearch Curator to apply a retention policy to logs
+enable_elasticsearch_curator: true
+# Duration after which index is closed
+elasticsearch_curator_soft_retention_period_days: 90
+# Duration after which index is deleted
+elasticsearch_curator_hard_retention_period_days: 180
+
+# Increase the Elasticsearch heap size (defaults to 1GB)
+es_heap_size: "16g"
+
+prometheus_fluentd_exporter_port: 24224
+
+# Change default prometheus retention period
+prometheus_cmdline_extras: '--storage.tsdb.retention.time=60d --storage.tsdb.retention.size=50GB'
+
+# kolla-ansible default, plus remove network stats
+#prometheus_cadvisor_cmdline_extras: "--docker_only --store_container_labels=false --disable_metrics=udp,sched,tcp,process,network"
+prometheus_cadvisor_cmdline_extras: "--docker_only --store_container_labels=false --disable_metrics=percpu,referenced_memory,cpu_topology,resctrl,udp,advtcp,sched,hugetlb,memory_numa,tcp,process"
+
+# TODO: kayobe specific raw tags need removing in some cases, missing horizon
+# missing internal endpoints that help with internal tls
+prometheus_blackbox_exporter_endpoints:
+  - "{% raw %}cinder:os_endpoint:{{ public_protocol }}://{{ kolla_external_fqdn | put_address_in_context('url') }}:{{ cinder_api_port}}{% endraw %}"
+  - "{% raw %}glance:os_endpoint:{{ public_protocol }}://{{ kolla_external_fqdn | put_address_in_context('url') }}:{{ glance_api_port}}{% endraw %}"
+  - "{% raw %}keystone:os_endpoint:{{ public_protocol }}://{{ kolla_external_fqdn | put_address_in_context('url') }}:{{ keystone_public_port}}{% endraw %}"
+  - "{% raw %}neutron:os_endpoint:{{ public_protocol }}://{{ kolla_external_fqdn | put_address_in_context('url') }}:{{ neutron_server_port}}{% endraw %}"
+  - "{% raw %}nova:os_endpoint:{{ public_protocol }}://{{ kolla_external_fqdn | put_address_in_context('url') }}:{{ nova_api_port}}{% endraw %}"
+  - "{% raw %}placement:os_endpoint:{{ public_protocol }}://{{ kolla_external_fqdn | put_address_in_context('url') }}:{{ placement_api_port}}{% endraw %}"
