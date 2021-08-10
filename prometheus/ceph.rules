@@ -116,6 +116,16 @@ groups:
           marked down and back up at {{ $value | humanize }} times once a
           minute for 5 minutes.
 
+    - alert: Ceph OSD Reweighted needed
+      expr: ceph_osd_weight < 1
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        description: >
+          Ceph OSD reweighted (OSD: {{ $labels.ceph_daemon }})
+
+
 #    # alert on high deviation from average PG count
 #    - alert: high pg count deviation
 #      expr: |
@@ -161,6 +171,71 @@ groups:
           {{ $value }} PGs haven't been clean for more than 15 minutes in pool {{ $labels.name }}.
           Unclean PGs haven't been able to completely recover from a
           previous failure.
+
+   - alert: pgs down
+     expr: ceph_pg_down > 0
+     for: 1m
+     labels:
+        severity: warning
+        type: ceph_default
+        oid: 1.3.6.1.4.1.50495.15.1.2.7.3
+      annotations:
+        description: >
+          Ceph PG down (Pool ID {{ $labels.pool_id }})
+
+  - alert: pgs incomplete
+    expr: ceph_pg_incomplete > 0
+    for: 1m
+    labels:
+        severity: warning
+        type: ceph_default
+        oid: 1.3.6.1.4.1.50495.15.1.2.7.4
+    annotations:
+      description: >
+        PG incomplete (Pool ID {{ $labels.pool_id }})
+
+  - alert: pg inconsistant
+    expr: ceph_pg_inconsistent > 0
+    for: 1m
+    labels:
+      severity: warning
+        type: ceph_default
+        oid: 1.3.6.1.4.1.50495.15.1.2.7.5
+    annotations:
+      description: >
+        pg inconsistant (Pool ID {{ $labels.pool_id }})
+
+  - alert: pg ActivationLong
+    expr: ceph_pg_activating > 0
+    for: 2m
+    labels:
+      severity: warning
+        type: ceph_default
+        oid: 1.3.6.1.4.1.50495.15.1.2.7.6
+    annotations:
+      description: >
+        pg activation too long (Pool ID {{ $labels.pool_id }})
+
+  - alert: pg backfill full
+    expr: ceph_pg_backfill_toofull > 0
+    for: 2m
+    labels:
+      severity: warning
+         type: ceph_default
+         oid: 1.3.6.1.4.1.50495.15.1.2.7.7
+    annotations:
+      description: >
+        pg backfill full (Pool ID {{ $labels.pool_id }})
+
+  - alert: CephPgUnavailable
+    expr: ceph_pg_total - ceph_pg_active > 0
+    for: 1m
+    labels:
+      severity: warning
+         type: ceph_default
+         oid: 1.3.6.1.4.1.50495.15.1.2.7.8
+    annotations:
+      description: pg unavailable (Pool ID {{ $labels.pool_id }})
 
 - name: nodes
   rules:
@@ -251,5 +326,19 @@ groups:
         type: ceph_default
       annotations:
         description: "{{ $value }} OSD requests are taking too long to process (osd_op_complaint_time exceeded)"
+
+- name: ceph exporter
+   rules:
+  - alert: CephMgrExporterDown
+    expr: up{job="ceph_mgr_exporter"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: >
+      the Ceph-Manager-Exporter is down.
+      message: CEPH target down for more than 1m, please check
+
+
 
 {% endraw %}
