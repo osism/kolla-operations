@@ -78,4 +78,12 @@ groups:
       summary: "MySQL restarted (instance {{ $labels.instance }})"
       description: "MySQL has just been restarted, less than one minute ago on {{ $labels.instance }}.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
+  - alert: mariadb_innodb_replication_fallen_behind
+    expr: (mysql_global_variables_innodb_replication_delay > 30) and ON(instance) (predict_linear(mysql_global_variables_innodb_replication_delay[5m], 60 * 2) > 0)
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: MySQL innodb replication is lagging on host {{ $labels.host_name }}
+
 {% endraw %}
