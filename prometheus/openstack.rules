@@ -1,4 +1,4 @@
-{% raw %}
+
 
 groups:
 - name: OpenStack
@@ -12,4 +12,4 @@ groups:
       summary: "{{ $labels.service }} at {{ $labels.instance }} is down"
       description: "OpenStack service {{ $labels.service }} at {{ $labels.instance }} is down"
 
-{% endraw %}
+

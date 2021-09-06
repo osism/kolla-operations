@@ -1,6 +1,6 @@
 # Taken from https://awesome-prometheus-alerts.grep.to/rules
 
-{% raw %}
+
 
 groups:
 - name: Elasticsearch
@@ -96,4 +96,4 @@ groups:
       summary: "Elasticsearch pending tasks (instance {{ $labels.instance }})"
       description: "Elasticsearch has pending tasks. Cluster works slowly.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-{% endraw %}
+

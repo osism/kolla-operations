@@ -1,4 +1,4 @@
-{% raw %}
+
 {
   "annotations": {
     "list": [
@@ -13703,4 +13703,4 @@
   "uid": "node-exporter-full",
   "version": 7
 }
-{% endraw %}
+

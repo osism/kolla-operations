@@ -1,4 +1,4 @@
-{% raw %}
+
 
 groups:
 - name: Redfish
@@ -12,4 +12,4 @@ groups:
       summary: "Server {{ $labels.server }} has a problem"
       description: "Redish reports server {{ $labels.server }} as no longer healthy"
 
-{% endraw %}
+

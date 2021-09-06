@@ -1,6 +1,6 @@
 # Official set of upstream alerts https://github.com/ceph/ceph/blob/octopus/monitoring/prometheus/alerts/ceph_default_alerts.yml
 
-{% raw %}
+
 
 groups:
 - name: cluster health
@@ -341,4 +341,4 @@ groups:
 
 
 
-{% endraw %}
+

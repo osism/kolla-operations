@@ -1,6 +1,6 @@
 # Taken from https://awesome-prometheus-alerts.grep.to/rules
 
-{% raw %}
+
 
 groups:
 - name: Mysql
@@ -86,4 +86,4 @@ groups:
     annotations:
       description: MySQL innodb replication is lagging on host {{ $labels.host_name }}
 
-{% endraw %}
+

@@ -1,6 +1,6 @@
 # Taken from https://awesome-prometheus-alerts.grep.to/rules
 
-{% raw %}
+
 
 groups:
 - name: HAProxy
@@ -75,4 +75,4 @@ groups:
     annotations:
       description: HAProxy server healthcheck failure ({{ $labels.server }} for backend {{ $labels.backend }})
 
-{% endraw %}
+
