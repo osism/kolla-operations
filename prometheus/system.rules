@@ -1,4 +1,4 @@
-{% raw %}
+
 
 groups:
 - name: Node
@@ -76,4 +76,4 @@ groups:
       summary: "Host EDAC Uncorrectable Errors detected (instance {{ $labels.instance }})"
       description: "{{ $labels.instance }} has had {{ printf \"%.0f\" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
-{% endraw %}
+

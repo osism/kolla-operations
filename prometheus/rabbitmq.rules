@@ -1,4 +1,4 @@
-{% raw %}
+
 
 groups:
 - name: rabbitmq.rules
@@ -68,4 +68,4 @@ groups:
     annotations:
       description: Rabbitmq unroutable messages on {{ $labels.host_name }}
 
- {% endraw %}
+ 
