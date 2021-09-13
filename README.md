@@ -1,5 +1,7 @@
 # kolla-operations
 
+[![Rules](https://github.com/osism/kolla-operations/actions/workflows/rules.yml/badge.svg)](https://github.com/osism/kolla-operations/actions/workflows/rules.yml)
+
 Repository for Grafana/Kibana dashboards and Prometheus alerting rules.
 For use with the Prometheus exporters from Kolla.
 
