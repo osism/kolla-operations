@@ -52,7 +52,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      description: Rabbitmq too much connections on {{ $labels.host_name }
+      description: Rabbitmq too much connections on {{ $labels.host_name }}
   - alert: RabbitmqNoQueueConsumer
     expr: rabbitmq_queue_consumers < 1
     for: 1m
@@ -67,5 +67,3 @@ groups:
       severity: warning
     annotations:
       description: Rabbitmq unroutable messages on {{ $labels.host_name }}
-
- 

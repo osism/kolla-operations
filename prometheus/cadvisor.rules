@@ -32,7 +32,7 @@ groups:
       severity: warning
     annotations:
       summary: Container Memory usage {{ $labels.name }} on Host {{ $labels.host_name}}
-       description: "Container Memory usage VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      description: "Container Memory usage VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
   - alert: ContainerVolumeUsage
     expr: (1 - (sum(container_fs_inodes_free) BY (instance) / sum(container_fs_inodes_total) BY (instance)) * 100) > 80
