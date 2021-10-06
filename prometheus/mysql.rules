@@ -61,7 +61,7 @@ groups:
       description: "MysqL replication lag on {{ $labels.instance }}\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
 
   - alert: MysqlSlowQueries
-    expr: mysql_global_status_slow_queries > 0
+    expr: rate(mysql_global_status_slow_queries[5m]) > 0
     for: 2m
     labels:
       severity: warning
