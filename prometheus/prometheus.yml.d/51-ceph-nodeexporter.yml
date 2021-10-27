@@ -4,6 +4,6 @@ scrape_configs:
     static_configs:
       - targets:
 {% for host in groups['ceph'] %}
-        - "{{ admin_oc_net_name | net_ip(host) }}:9100"
+        - "{{ api_interface_address }}:9100"
 {% endfor %}
 {% endif %}
