@@ -1,22 +1,26 @@
 ---
 global:
   resolve_timeout: 5m
-  smtp_require_tls: true
-  slack_api_url: '{{ secrets_slack_notification_channel_url }}'
 
 route:
-  receiver: 'slack-notifications'
+  receiver: default-receiver
   group_by: [alertname, datacenter, app]
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
 
 receivers:
-  - name: 'slack-notifications'
+  - name: default-receiver
+  - name: email-notifications
+    email_configs:
+      - to: alerts@yourdomain.org
+        from: prometheus-alerts@{{ inventory_hostname }}
+        smarthost: localhost:25
+        send_resolved: true
+  - name: slack-notifications
     slack_configs:
-    - channel: '#vg-lab-notifications'
-      title: '{{ .GroupLabels.alertname }} alert'
-      text: '{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}'
-      send_resolved: true
-
-templates: []
+      - api_url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+        channel: '#vg-lab-notifications'
+        title: '{% raw %}{{ .GroupLabels.alertname }} alert{% endraw %}'
+        text: '{% raw %}{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}{% endraw %}'
+        send_resolved: true
