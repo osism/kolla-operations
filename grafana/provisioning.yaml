@@ -1,4 +1,4 @@
-# # config file version
+# config file version
 apiVersion: 1
 
 providers:
@@ -7,6 +7,11 @@ providers:
    type: file
    options:
      path: /var/lib/grafana/dashboards/ceph
+ - name: Infrastructure
+   folder: Infrastructure
+   type: file
+   options:
+     path: /var/lib/grafana/dashboards/infrastructure
  - name: OpenStack
    folder: OpenStack
    type: file
