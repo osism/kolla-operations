@@ -4,6 +4,8 @@ on:
     paths:
     - 'prometheus/*.rules'
   push:
+    branches:
+      - main
 
 jobs:
   test-rules:
