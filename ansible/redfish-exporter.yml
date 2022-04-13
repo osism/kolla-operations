@@ -2,11 +2,11 @@
 - hosts: monitoring[0]
   gather_facts: false
   tasks:
-   - copy:
+   - ansible.builtin.copy:
        src: "{{playbook_dir}}/dockerfiles/redfish-exporter.Dockerfile"
        dest: /opt/kayobe/redfish-exporter.Dockerfile
 
-   - copy:
+   - ansible.builtin.copy:
        dest: /etc/kolla/prometheus-server/redfish-exporter.yml
        content: |-
          ---
@@ -16,7 +16,7 @@
              password: "{{ ipmi_password }}"
      become: true
 
-   - docker_image:
+   - community.docker.docker_image:
       name: redfish-exporter
       build:
         dockerfile: redfish-exporter.Dockerfile
@@ -26,7 +26,7 @@
       source: build
      become: true
 
-   - docker_container:
+   - community.docker.docker_container:
        name: redfish-exporter
        image: redfish-exporter
        command: ./main --config.file /redfish-exporter.yml
