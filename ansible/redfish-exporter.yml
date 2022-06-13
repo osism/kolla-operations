@@ -2,35 +2,39 @@
 - hosts: monitoring[0]
   gather_facts: false
   tasks:
-   - ansible.builtin.copy:
-       src: "{{playbook_dir}}/dockerfiles/redfish-exporter.Dockerfile"
-       dest: /opt/kayobe/redfish-exporter.Dockerfile
+    - name: Copy redfish-exporter dockerfile
+      ansible.builtin.copy:
+        src: "{{playbook_dir}}/dockerfiles/redfish-exporter.Dockerfile"
+        dest: /opt/kayobe/redfish-exporter.Dockerfile
 
-   - ansible.builtin.copy:
-       dest: /etc/kolla/prometheus-server/redfish-exporter.yml
-       content: |-
-         ---
-         hosts:
-           default:
-             username: "{{ ipmi_username }}"
-             password: "{{ ipmi_password }}"
-     become: true
+    - name: Copy redfish-exporter.yml to prometheus-server
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/kolla/prometheus-server/redfish-exporter.yml
+        content: |-
+          ---
+          hosts:
+            default:
+              username: "{{ ipmi_username }}"
+              password: "{{ ipmi_password }}"
 
-   - community.docker.docker_image:
-      name: redfish-exporter
-      build:
-        dockerfile: redfish-exporter.Dockerfile
-        pull: false
-        path: /opt/kayobe/
-        network: host
-      source: build
-     become: true
+    - name: Build docker image
+      become: true
+      community.docker.docker_image:
+        name: redfish-exporter
+        build:
+          dockerfile: redfish-exporter.Dockerfile
+          pull: false
+          path: /opt/kayobe/
+          network: host
+        source: build
 
-   - community.docker.docker_container:
-       name: redfish-exporter
-       image: redfish-exporter
-       command: ./main --config.file /redfish-exporter.yml
-       volumes: /etc/kolla/prometheus-server/redfish-exporter.yml:/redfish-exporter.yml:ro
-       network_mode : host
-       restart_policy: unless-stopped
-     become: true
+    - name: Create docker container
+      become: true
+      community.docker.docker_container:
+        name: redfish-exporter
+        image: redfish-exporter
+        command: ./main --config.file /redfish-exporter.yml
+        volumes: /etc/kolla/prometheus-server/redfish-exporter.yml:/redfish-exporter.yml:ro
+        network_mode: host
+        restart_policy: unless-stopped
