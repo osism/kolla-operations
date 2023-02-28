@@ -1,11 +1,13 @@
 ---
-- hosts: monitoring[0]
+- name: Redfish-Exporter
+  hosts: monitoring[0]
   gather_facts: false
   tasks:
     - name: Copy redfish-exporter dockerfile
       ansible.builtin.copy:
         src: "{{playbook_dir}}/dockerfiles/redfish-exporter.Dockerfile"
         dest: /opt/kayobe/redfish-exporter.Dockerfile
+        mode: 0640
 
     - name: Copy redfish-exporter.yml to prometheus-server
       become: true
@@ -17,6 +19,7 @@
             default:
               username: "{{ ipmi_username }}"
               password: "{{ ipmi_password }}"
+        mode: 0640
 
     - name: Build docker image
       become: true
