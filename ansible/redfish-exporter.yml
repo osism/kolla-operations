@@ -5,7 +5,7 @@
   tasks:
     - name: Copy redfish-exporter dockerfile
       ansible.builtin.copy:
-        src: "{{playbook_dir}}/dockerfiles/redfish-exporter.Dockerfile"
+        src: "{{ playbook_dir }}/dockerfiles/redfish-exporter.Dockerfile"
         dest: /opt/kayobe/redfish-exporter.Dockerfile
         mode: 0640
 
