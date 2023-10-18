@@ -1,8 +1,9 @@
+---
 name: Test Alertmanager rule files
-on:
+on:  # yamllint disable-line rule:truthy
   pull_request:
     paths:
-    - 'prometheus/*.rules'
+      - 'prometheus/*.rules'
   push:
     branches:
       - main
@@ -11,9 +12,9 @@ jobs:
   test-rules:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-go@v2
-      with:
-        go-version: "1.16"
-    - run: GO111MODULE=on go get github.com/prometheus/prometheus/cmd/promtool@35c88e511f6954fabeb441c13e4534142e879570
-    - run: promtool check rules prometheus/*.rules
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.16"
+      - run: GO111MODULE=on go get github.com/prometheus/prometheus/cmd/promtool@35c88e511f6954fabeb441c13e4534142e879570
+      - run: promtool check rules prometheus/*.rules
