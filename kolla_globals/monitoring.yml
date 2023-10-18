@@ -1,8 +1,8 @@
 ---
 # TODO: don't put it here for kayobe
-kolla_enable_central_logging: True
-enable_prometheus_server: True
-kolla_enable_grafana: True
+kolla_enable_central_logging: True  # yamllint disable-line rule:truthy
+enable_prometheus_server: True  # yamllint disable-line rule:truthy
+kolla_enable_grafana: True  # yamllint disable-line rule:truthy
 
 # Allow Elasticsearch Curator to apply a retention policy to logs
 enable_elasticsearch_curator: true
@@ -20,7 +20,7 @@ prometheus_fluentd_exporter_port: 24224
 prometheus_cmdline_extras: '--storage.tsdb.retention.time=60d --storage.tsdb.retention.size=50GB'
 
 # kolla-ansible default, plus remove network stats
-#prometheus_cadvisor_cmdline_extras: "--docker_only --store_container_labels=false --disable_metrics=udp,sched,tcp,process,network"
+# prometheus_cadvisor_cmdline_extras: "--docker_only --store_container_labels=false --disable_metrics=udp,sched,tcp,process,network"
 prometheus_cadvisor_cmdline_extras: "--docker_only --store_container_labels=false --disable_metrics=percpu,referenced_memory,cpu_topology,resctrl,udp,advtcp,sched,hugetlb,memory_numa,tcp,process"
 
 # TODO: kayobe specific raw tags need removing in some cases, missing horizon
