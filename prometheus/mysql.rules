@@ -121,12 +121,3 @@ groups:
     annotations:
       description: "{{$labels.job}} on {{$labels.instance}} ist out of sync."
       message: "Galera cluster node out of sync on host {{ $labels.host_name }}"
-
-  - alert: mariadb_innodb_replication_fallen_behind
-    expr: (mysql_global_variables_innodb_replication_delay > 30) and ON(instance) (predict_linear(mysql_global_variables_innodb_replication_delay[5m], 60 * 2) > 0)
-    for: 10m
-    labels:
-      severity: warning
-    annotations:
-      description: "MySQL InnoDB replication is running too slow on host {{ $labels.host_name }} and hasn't gotten faster for 10 minutes."
-      message: "MySQL innodb replication is lagging on host {{ $labels.host_name }}"

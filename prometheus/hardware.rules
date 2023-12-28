@@ -1,7 +1,6 @@
 groups:
 - name: hardware.rules
   rules:
-  
   - alert: node_network_bond_slaves_down
     expr: node_bonding_slaves - node_bonding_active > 0
     for: 5m
@@ -10,15 +9,6 @@ groups:
     annotations:
       description: "On {{ $labels.host_name }} in Bond {{ $labels.master }} is {{ $value }} interface(s) down."
       message: "Host {{ $labels.host_name }}: {{ $labels.master }}  missing {{ $value }} slave interface(s)"
-  
-  - alert: HostOutOfMemory
-    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
-    for: 1h
-    labels:
-      severity: warning
-    annotations:
-      description: "The host {{ $labels.host_name }} was at 90% memory capacity for at least an hour."
-      message: "{{ $labels.host_name }} out of memory. Please check"
   
   - alert: HostOutOfMemory
     expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10

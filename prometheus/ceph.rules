@@ -342,19 +342,19 @@ groups:
 - name: Ceph Latency
   rules:
     - alert: CephHighLatency
-    expr: irate(ceph_osd_op_r_latency_sum[5m]) >= 15
-    for: 2m
-    labels:
-      severity: warning
-    annotations:
-      description: "OSD read latencies {{ $labels.ceph_daemon }} > 15ms. It must be checked which host the OSD is on."
-      message: "Ceph OSD high read latency ({{ $labels.ceph_daemon }})"
+      expr: irate(ceph_osd_op_r_latency_sum[5m]) >= 15
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        description: "OSD read latencies {{ $labels.ceph_daemon }} > 15ms. It must be checked which host the OSD is on."
+        message: "Ceph OSD high read latency ({{ $labels.ceph_daemon }})"
 
-  - alert: CephHighLatency_crit
-    expr: irate(ceph_osd_op_r_latency_sum[5m]) >= 25
-    for: 2m
-    labels:
-      severity: critical
-    annotations:
-      description: "OSD read latencies {{ $labels.ceph_daemon }} > 25ms. It must be checked which host the OSD is on."
-      message: "Ceph OSD high read latency ({{ $labels.ceph_daemon }})"
+    - alert: CephHighLatency_crit
+      expr: irate(ceph_osd_op_r_latency_sum[5m]) >= 25
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        description: "OSD read latencies {{ $labels.ceph_daemon }} > 25ms. It must be checked which host the OSD is on."
+        message: "Ceph OSD high read latency ({{ $labels.ceph_daemon }})"
