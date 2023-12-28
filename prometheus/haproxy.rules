@@ -87,14 +87,7 @@ groups:
       annotations:
         description: "Too many connection errors to the {{ $labels.backend }} backend (> 100 req/s). Overload due to high number of requests"
         message: "HAProxy backend connection errors ({{ $labels.backend }} on instance {{ $labels.server }})"
-      expr: sum(rate(haproxy_backend_connection_errors_total[1m])) BY (haproxy_backend_sessions_total) > 100
-      for: 1m
-      labels:
-        severity: critical
-      annotations:
-        description: "Too many connection errors to the {{ $labels.backend }} backend (> 100 req/s). Overload due to high number of requests"
-        message: "HAProxy backend connection errors ({{ $labels.backend }} on instance {{ $labels.server }})"
-    
+
     - alert: HaproxyCephDashboardDown
       expr: sum(haproxy_server_up{backend="ceph_dashboard"}) == 0
       for: 1m
