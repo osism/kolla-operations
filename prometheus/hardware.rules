@@ -1,0 +1,263 @@
+groups:
+- name: hardware.rules
+  rules:
+  
+  - alert: node_network_bond_slaves_down
+    expr: node_bonding_slaves - node_bonding_active > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: "On {{ $labels.host_name }} in Bond {{ $labels.master }} is {{ $value }} interface(s) down."
+      message: "Host {{ $labels.host_name }}: {{ $labels.master }}  missing {{ $value }} slave interface(s)"
+  
+  - alert: HostOutOfMemory
+    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      description: "The host {{ $labels.host_name }} was at 90% memory capacity for at least an hour."
+      message: "{{ $labels.host_name }} out of memory. Please check"
+  
+  - alert: HostOutOfMemory
+    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      description: "The host {{ $labels.host_name }} was at 90% memory capacity for at least an hour."
+      message: "{{ $labels.host_name }} out of memory. Please check"
+  
+  - alert: ClusterOutOfMemory
+    expr: sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes) * 100 < 5
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      description: "The cluster's memory was 95% full for at least an hour."
+      message: "Cluster out of memory. Please check"
+  
+  - alert: HostMemoryUnderMemoryPressure
+    expr: rate(node_vmstat_pgmajfault[1m]) > 1000
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      message: "{{ $labels.host_name }} memory under memory pressure"
+  
+  - alert: HostUnusualDiskReadRate
+    expr: sum(rate(node_disk_read_bytes_total[2m])) BY (instance,host_name,device) / 1024 / 1024 > 500
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: "The device {{ $labels.device }} of the host {{ $labels.host_name }} has a high read rate (more than 50 MB/s) over five minutes."
+      message: "{{ $labels.host_name }} unusual disk read rate on {{ $labels.device }})"
+  
+  - alert: HostUnusualDiskWriteRate
+    expr: sum(rate(node_disk_written_bytes_total[2m])) BY (instance,host_name,device) / 1024 / 1024 > 500
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: "The device {{ $labels.device }} of the host {{ $labels.host_name }} has a high write rate (more than 50 MB/s) over five minutes."
+      message: "{{ $labels.host_name }} unusual disk write rate on {{ $labels.device }}"
+  
+  - alert: HostOutOfDiskSpace
+    expr: (node_filesystem_avail_bytes{fstype="ext4"} * 100) / node_filesystem_size_bytes{fstype="ext4"} < 10 and ON(instance, device, mountpoint) node_filesystem_readonly == 0
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "The device {{ $labels.mountpoint }} on host {{ $labels.host_name }} has <10% disk space"
+      message: "{{ $labels.host_name }} out of disk space on {{ $labels.mountpoint }}"
+  
+  - alert: HostDiskWillFillIn24Hours
+    expr: (node_filesystem_avail_bytes{fstype="ext4"} * 100) / node_filesystem_size_bytes{fstype="ext4"} < 10 and ON(instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{fstype!~"tmpfs"}[1h], 24 * 3600) < 0 and ON(instance, device, mountpoint) node_filesystem_readonly == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "The disk {{ $labels.mountpoint }} of the host {{ $labels.host_name }} will fill up in the next 24 hours if writing continues at the current write rate."
+      message: "{{ $labels.host_name }} disk will fill in 24 hours on {{ $labels.mountpoint }}"
+  
+  - alert: HostOutOfInodes
+    expr: node_filesystem_files_free{mountpoint="/"} / node_filesystem_files{mountpoint="/"} * 100 < 10 and ON(instance, device, mountpoint) node_filesystem_readonly{mountpoint="/"} == 0
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "The disk {{ $labels.mountpoint }} on {{ $labels.host_name }} has less than 10% inodes free."
+      message: "{{ $labels.host_name }} out of inodes on {{ $labels.mountpoint }}"
+  
+  - alert: HostInodesWillFillIn24Hours
+    expr: node_filesystem_files_free{mountpoint="/"} / node_filesystem_files{mountpoint="/"} * 100 < 10 and predict_linear(node_filesystem_files_free{mountpoint="/"}[1h], 24 * 3600) < 0 and ON(instance, device, mountpoint) node_filesystem_readonly{mountpoint="/"} == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "The inodes of the disk {{ $labels.mountpoint }} on {{ $labels.host_name }} will fill up in the next 24 hours if writing continues at the current write rate."
+      message: "{{ $labels.host_name }} inodes will fill in 24 hours on {{ $labels.mountpoint }}"
+  
+  - alert: HostUnusualDiskReadLatency
+    expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "The read latency of the disk {{ $labels.mountpoint }} on {{ $labels.host_name }} has been >100ms for over two minutes."
+      message: "{{ $labels.host_name }} unusual disk read latency on {{ $labels.device }}"
+  
+  - alert: HostUnusualDiskWriteLatency
+    expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "The write latency of the disk {{ $labels.mountpoint }} on {{ $labels.host_name }} has been >100ms for over two minutes."
+      message: "{{ $labels.host_name }} unusual disk write latency on {{ $labels.device }}"
+  
+  - alert: HostHighCpuLoad
+    expr: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[2m])) BY (instance) * 100) > 95
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      description: "The CPU load of {{ $labels.host_name }} is > 95%."
+      message: "{{ $labels.host_name }} high CPU load"
+  
+  - alert: HostCpuStealNoisyNeighbor
+    expr: avg(rate(node_cpu_seconds_total{mode="steal"}[5m])) BY (instance) * 100 > 10
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "CPU steal from {{ $labels.host_name }} is > 10%. The VMs fight over CPU time."
+      message: "{{ $labels.host_name }} CPU steal noisy neighbor"
+  
+  - alert: HostSwapIsFillingUp
+    expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "Swap of {{ $labels.host_name }} is > 80%."
+      message: "{{ $labels.host_name }} swap is filling up"
+  
+  - alert: HostPhysicalComponentTooHot
+    expr: node_hwmon_temp_celsius > 87
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: "Certain server components on {{ $labels.host_name }} have a temperature of over 87°"
+      message: "{{ $labels.host_name }} physical component too hot"
+  
+  - alert: HostNodeOvertemperatureAlarm
+    expr: node_hwmon_temp_crit_alarm_celsius == 1
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: "Temperature alarm triggered on {{ $labels.host_name }}. It is possible that the host will shut down in the near future."
+      message: "{{ $labels.host_name }} node overtemperature alarm"
+  
+  - alert: HostRaidArrayGotInactive
+    expr: node_md_is_active != 1
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: "The RAID array {{ $labels.device }} on {{ $labels.host_name }} is degraded due to an SSD failure. The defective SSD must be replaced to bring the RAID back to the desired state. VALUE = {{ $value }} LABELS: {{ $labels }}"
+      message: "{{ $labels.host_name }} RAID array got inactive"
+  
+  - alert: HostRaidDiskFailure
+    expr: node_md_disks_active < 2
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "One of the two disks relevant to the operating system of the {{ $labels.device }} RAID1 on {{ $labels.host_name }} are defective."
+      message: "{{ $labels.host_name }} RAID disk failure Array {{ $labels.device }}"
+  
+  - alert: HostKernelVersionDeviations
+    expr: count(sum(label_replace(node_uname_info, "kernel", "$1", "release", "([0-9]+.[0-9]+.[0-9]+).*")) BY (kernel)) > 1
+    for: 6h
+    labels:
+      severity: warning
+    annotations:
+      description: "The kernel version of {{ $labels.nodename }} is at a different level."
+      message: "Host kernel version deviations on Host {{ $labels.nodename }}"
+  
+  - alert: HostOomKillDetected
+    expr: increase(node_vmstat_oom_kill[1m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: "The OOM killer killed processes on {{ $labels.host_name }}."
+      message: "{{ $labels.host_name }} OOM kill detected"
+  
+  - alert: HostEdacCorrectableErrorsDetected
+    expr: increase(node_edac_correctable_errors_total[1m]) > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: "{{ $labels.host_name }} detected {{ $value }} recoverable memory errors through Automatic Error Detection and Correction (EDAC)."
+      message: "{{ $labels.host_name }} EDAC Correctable Errors detected (instance )"
+  
+  - alert: HostNetworkReceiveErrors
+    expr: rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      description: "{{ $labels.host_name }} interface {{ $labels.device }} has registered {{ $value }} errors on incoming packets in the last 10 minutes."
+      message: "{{ $labels.host_name }} Network Receive Errors on interface {{ $labels.device }})"
+  
+  - alert: HostNetworkTransmitErrors
+    expr: rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      description: "{{ $labels.host_name }} interface {{ $labels.device }} has registered {{ $value }} errors in packages sent in the last 10 minutes."
+      message: "{{ $labels.host_name }} Network Transmit Errors on interface {{ $labels.device }}"
+  
+  - alert: HostNetworkInterfaceSaturated
+    expr: (rate(node_network_receive_bytes_total{device!~"^tap.*"}[1m]) + rate(node_network_transmit_bytes_total{device!~"^tap.*"}[1m])) / node_network_speed_bytes{device!~"^tap.*"} > 0.8
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: "{{ $labels.device }} The node {{ $labels.host_name }} is saturated and is over 80% utilization "
+      message: "{{ $labels.host_name }} Network Interface {{ $labels.device }} Saturated"
+  
+  - alert: HostConntrackLimit
+    expr: node_nf_conntrack_entries / node_nf_conntrack_entries_limit > 0.8
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: "{{ $labels.host_name }} The node's connection tracking limit has almost been reached in the last five minutes. "
+      message: "{{ $labels.host_name }} conntrack limit reached"
+  
+  - alert: HostClockSkew
+    expr: (node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0)
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "Time deviation registered. The system clock is no longer synchronous. VALUE = {{ $value }} LABELS: {{ $labels }}"
+      message: "Host clock skew (instance {{ $labels.host_name }})"
+  
+  - alert: HostClockNotSynchronising
+    expr: min_over_time(node_timex_sync_status[1m]) == 0 and node_timex_maxerror_seconds >= 16
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "The time synchronization of the host {{ $labels.host_name }} is not correct"
+      message: "{{ $labels.host_name }} clock not synchronising"

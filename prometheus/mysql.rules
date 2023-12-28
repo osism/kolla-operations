@@ -84,6 +84,49 @@ groups:
     labels:
       severity: warning
     annotations:
-      description: MySQL innodb replication is lagging on host {{ $labels.host_name }}
+      description: "MySQL innodb replication is lagging on host {{ $labels.host_name }}"
 
+  - alert: MysqlInnodbLogWaits
+    expr: rate(mysql_global_status_innodb_log_waits[15m]) > 10
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: "Writing the InnoDB logs is too slow on {{ $labels.host_name }}."
+      message: "MySQL InnoDB log waits on Host {{ $labels.host_name }}"
 
+  - alert: mariadb_table_lock_wait_high
+    expr: 100 * mysql_global_status_table_locks_waited / (mysql_global_status_table_locks_waited + mysql_global_status_table_locks_immediate) > 30
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "Mariadb hat hohe Table Lock Waits."
+      message: "Mariadb table lock waits are high on host {{ $labels.host_name }}"
+
+  - alert: mariadb_node_not_ready
+    expr: mysql_global_status_wsrep_ready != 1
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "{{$labels.job}} is not ready on host {{ $labels.host_name }}."
+      message: "Galera cluster node not ready on host {{ $labels.host_name }}"
+
+  - alert: mariadb_galera_node_out_of_sync
+    expr: mysql_global_status_wsrep_local_state != 4 and mysql_global_variables_wsrep_desync == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "{{$labels.job}} on {{$labels.instance}} ist out of sync."
+      message: "Galera cluster node out of sync on host {{ $labels.host_name }}"
+
+  - alert: mariadb_innodb_replication_fallen_behind
+    expr: (mysql_global_variables_innodb_replication_delay > 30) and ON(instance) (predict_linear(mysql_global_variables_innodb_replication_delay[5m], 60 * 2) > 0)
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: "MySQL InnoDB replication is running too slow on host {{ $labels.host_name }} and hasn't gotten faster for 10 minutes."
+      message: "MySQL innodb replication is lagging on host {{ $labels.host_name }}"

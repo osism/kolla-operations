@@ -6,6 +6,7 @@ rules:
   line-length: disable
 
 ignore: |
+  prometheus/prometheus.yml.d/60-fluentd-aggregator.yml
   prometheus/prometheus.yml.d/51-ceph-nodeexporter.yml
   prometheus/prometheus.yml.d/50-ceph.yml
   prometheus/prometheus.yml.d/10-redfish.yml

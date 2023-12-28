@@ -40,7 +40,7 @@ groups:
       labels:
         severity: critical
       annotations:
-        description: HAProxy server response errors ({{ $labels.backend }} on instance {{ $labels.server }})
+        description: "HAProxy server response errors ({{ $labels.backend }} on instance {{ $labels.server }})"
 
     - alert: HaproxyServerConnectionErrors
       expr: sum(rate(haproxy_server_connection_errors_total[1m])) BY (server) > 100
@@ -48,7 +48,7 @@ groups:
       labels:
         severity: critical
       annotations:
-        description: HAProxy server connection errors ({{ $labels.backend }} on instance {{ $labels.server }})
+        description: "HAProxy server connection errors ({{ $labels.backend }} on instance {{ $labels.server }})"
 
     - alert: HaproxyBackendMaxActiveSession
       expr: ((sum(avg_over_time(haproxy_backend_max_sessions[2m])) BY (haproxy_backend_sessions_total) / sum(avg_over_time(haproxy_backend_limit_sessions[2m])) BY (haproxy_backend_sessions_total))
@@ -57,7 +57,7 @@ groups:
       labels:
         severity: warning
       annotations:
-        description: HAProxy backend max active session ({{ $labels.backend }} on instance {{ $labels.server }})
+        description: "HAProxy backend max active session ({{ $labels.backend }} on instance {{ $labels.server }})"
 
     - alert: HaproxyHttpSlowingDown
       expr: avg(haproxy_backend_http_total_time_average_seconds) BY (haproxy_backend_sessions_total) > 7
@@ -65,7 +65,7 @@ groups:
       labels:
         severity: warning
       annotations:
-        description: HAProxy HTTP slowing down ({{ $labels.backend }} on instance {{ $labels.server }})
+        description: "HAProxy HTTP slowing down ({{ $labels.backend }} on instance {{ $labels.server }})"
 
     - alert: HaproxyServerHealthcheckFailure
       expr: increase(haproxy_server_check_failures_total[5m]) > 3
@@ -73,4 +73,22 @@ groups:
       labels:
         severity: warning
       annotations:
-        description: HAProxy server healthcheck failure ({{ $labels.server }} for backend {{ $labels.backend }})
+        description: "HAProxy server healthcheck failure ({{ $labels.server }} for backend {{ $labels.backend }})"
+
+    - alert: HaproxyBackendConnectionErrors
+    expr: sum(rate(haproxy_backend_connection_errors_total[1m])) BY (haproxy_backend_sessions_total) > 100
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: "Too many connection errors to the {{ $labels.backend }} backend (> 100 req/s). Overload due to high number of requests"
+      message: "HAProxy backend connection errors ({{ $labels.backend }} on instance {{ $labels.server }})"
+    
+    - alert: HaproxyCephDashboardDown
+    expr: sum(haproxy_server_up{backend="ceph_dashboard"}) == 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: "HAProxy {{ $labels.backend }} is down."
+      message: "HAProxy {{ $labels.backend }} auf {{ $labels.server }}"

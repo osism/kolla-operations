@@ -1,0 +1,25 @@
+groups:
+- name: fluentd-aggregator.rules
+  rules:
+
+  - alert: fluentd_aggregator_buffer_size_warn
+    expr: fluentd_output_status_buffer_total_bytes > 5.24288e+08
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: "Most probably fluentd-aggragator on {{ $labels.host_name }}
+        is unable to forward data. Event flooding is also possible
+        after restarts/changes in the Openstack environment"
+      message: "Buffer of fluentd-aggregator is filling up. {{ $labels.host_name }}"
+
+  - alert: fluentd_aggregator_buffer_size_crit
+    expr: fluentd_output_status_buffer_total_bytes > 2.097152e+09
+    for: 15m
+    labels:
+      severity: critical
+    annotations:
+      description: "Most probably fluentd-aggragator on {{ $labels.host_name }}
+        is unable to forward data. Event flooding is also possible
+        after restarts/changes in the Openstack environment"
+      message: "Buffer of fluentd-aggregator is filling up. {{ $labels.host_name }}"
