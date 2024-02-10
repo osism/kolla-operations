@@ -3642,6 +3642,285 @@
             }
          ],
          "type": "table"
+      },
+      {
+         "aliasColors": {},
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "${DS_PROMETHEUS}",
+         "description": "",
+         "editable": true,
+         "error": false,
+         "fill": 1,
+         "fillGradient": 0,
+         "grid": {},
+         "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 41
+         },
+         "hiddenSeries": false,
+         "id": 43,
+         "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "sort": "avg",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+         },
+         "lines": true,
+         "linewidth": 2,
+         "links": [],
+         "nullPointMode": "connected",
+         "options": {
+            "dataLinks": []
+         },
+         "percentage": false,
+         "pointradius": 5,
+         "points": false,
+         "renderer": "flot",
+         "seriesOverrides": [
+            {
+               "alias": "/^Total.*$/",
+               "stack": false
+            }
+         ],
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "ceph_pg_active",
+               "format": "time_series",
+               "hide": true,
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Active",
+               "refId": "M"
+            },
+            {
+               "expr": "ceph_pg_clean",
+               "format": "time_series",
+               "hide": true,
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Clean",
+               "refId": "U"
+            },
+            {
+               "expr": "ceph_pg_peering",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Peering",
+               "refId": "I"
+            },
+            {
+               "expr": "ceph_pg_degraded",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Degraded",
+               "refId": "B",
+               "step": 300
+            },
+            {
+               "expr": "ceph_pg_stale",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Stale",
+               "refId": "C",
+               "step": 300
+            },
+            {
+               "expr": "ceph_unclean_pgs",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Unclean",
+               "refId": "D",
+               "step": 300
+            },
+            {
+               "expr": "ceph_pg_undersized",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Undersized",
+               "refId": "E",
+               "step": 300
+            },
+            {
+               "expr": "ceph_pg_incomplete",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Incomplete",
+               "refId": "G"
+            },
+            {
+               "expr": "ceph_pg_forced_backfill",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Forced Backfill",
+               "refId": "H"
+            },
+            {
+               "expr": "ceph_pg_inconsistent",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Inconsistent",
+               "refId": "F"
+            },
+            {
+               "expr": "ceph_pg_forced_recovery",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Forced Recovery",
+               "refId": "J"
+            },
+            {
+               "expr": "ceph_pg_creating",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Creating",
+               "refId": "K"
+            },
+            {
+               "expr": "ceph_pg_wait_backfill",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Wait Backfill",
+               "refId": "L"
+            },
+            {
+               "expr": "ceph_pg_deep",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Deep",
+               "refId": "N"
+            },
+            {
+               "expr": "ceph_pg_scrubbing",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Scrubbing",
+               "refId": "O"
+            },
+            {
+               "expr": "ceph_pg_recovering",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Recovering",
+               "refId": "P"
+            },
+            {
+               "expr": "ceph_pg_repair",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Repair",
+               "refId": "Q"
+            },
+            {
+               "expr": "ceph_pg_down",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Down",
+               "refId": "R"
+            },
+            {
+               "expr": "ceph_pg_peered",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Peered",
+               "refId": "S"
+            },
+            {
+               "expr": "ceph_pg_backfill",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Backfill",
+               "refId": "T"
+            },
+            {
+               "expr": "ceph_pg_remapped",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Remapped",
+               "refId": "V"
+            },
+            {
+               "expr": "ceph_pg_backfill_toofull",
+               "format": "time_series",
+               "interval": "$interval",
+               "intervalFactor": 1,
+               "legendFormat": "Backfill Toofull",
+               "refId": "W"
+            }
+         ],
+         "thresholds": [],
+         "timeFrom": null,
+         "timeRegions": [],
+         "timeShift": null,
+         "title": "Bad PGs",
+         "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 1,
+            "value_type": "individual"
+         },
+         "type": "graph",
+         "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+         },
+         "yaxes": [
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": 0,
+               "show": true
+            },
+            {
+               "format": "short",
+               "label": null,
+               "logBase": 1,
+               "max": null,
+               "min": null,
+               "show": true
+            }
+         ],
+         "yaxis": {
+            "align": false,
+            "alignLevel": null
+         }
       }
    ],
    "refresh": "1m",
