@@ -1,5 +1,37 @@
-
 {
+  "__inputs": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "6.1.0"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "singlestat",
+      "name": "Singlestat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -13,7 +45,7 @@
       },
       {
         "datasource": "$datasource",
-        "enable": false,
+        "enable": true,
         "expr": "changes(process_start_time_seconds{ instance=~\"$instance\"}[2m]) > 0",
         "hide": false,
         "iconColor": "#bf1b00",
@@ -29,8 +61,8 @@
   "editable": true,
   "gnetId": 9578,
   "graphTooltip": 1,
-  "id": 106,
-  "iteration": 1616777581349,
+  "id": null,
+  "iteration": 1555334727804,
   "links": [
     {
       "icon": "doc",
@@ -81,7 +113,6 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -135,7 +166,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -188,7 +218,6 @@
       },
       "id": 26,
       "links": [],
-      "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
@@ -199,14 +228,12 @@
       "styles": [
         {
           "alias": "Time",
-          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "hidden"
         },
         {
           "alias": "Instance",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -223,7 +250,6 @@
         },
         {
           "alias": "Version",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -240,7 +266,6 @@
         },
         {
           "alias": "Up time",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -257,7 +282,6 @@
         },
         {
           "alias": "Last reload",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -274,7 +298,6 @@
         },
         {
           "alias": "Last reload sucessfull",
-          "align": "auto",
           "colorMode": "cell",
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -294,7 +317,6 @@
         },
         {
           "alias": "",
-          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -380,7 +402,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -462,7 +483,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -544,7 +564,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -626,7 +645,6 @@
       "maxDataPoints": 100,
       "nullPointMode": "connected",
       "nullText": null,
-      "options": {},
       "postfix": "",
       "postfixFontSize": "50%",
       "prefix": "",
@@ -668,7 +686,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -688,14 +705,12 @@
       "datasource": "$datasource",
       "description": "Number of sent notifications to distinct integrations such as PagerDuty, Slack and so on. On negative axis are displayed failed notifications.",
       "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 24,
+        "w": 6,
         "x": 0,
         "y": 7
       },
-      "hiddenSeries": false,
       "id": 118,
       "legend": {
         "alignAsTable": true,
@@ -716,22 +731,12 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "repeat": "instance",
       "repeatDirection": "h",
-      "scopedVars": {
-        "instance": {
-          "selected": false,
-          "text": "10.225.1.1:9093",
-          "value": "10.225.1.1:9093"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "/Failed.*/",
@@ -809,14 +814,12 @@
       "datasource": "$datasource",
       "description": "Duration of notification sends in 0.99 and 0.9 quantiles per integration.",
       "fill": 0,
-      "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 24,
+        "w": 6,
         "x": 0,
         "y": 12
       },
-      "hiddenSeries": false,
       "id": 115,
       "legend": {
         "alignAsTable": true,
@@ -837,22 +840,12 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
-      "options": {
-        "dataLinks": []
-      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "repeat": "instance",
       "repeatDirection": "h",
-      "scopedVars": {
-        "instance": {
-          "selected": false,
-          "text": "10.225.1.1:9093",
-          "value": "10.225.1.1:9093"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "/0.99.*/",
@@ -926,7 +919,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -946,14 +938,12 @@
       "datasource": "$datasource",
       "description": "Number of alerts by state such as `active`, `suppressed` etc.",
       "fill": 4,
-      "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 24,
+        "w": 6,
         "x": 0,
         "y": 19
       },
-      "hiddenSeries": false,
       "id": 6,
       "legend": {
         "avg": false,
@@ -968,22 +958,12 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null as zero",
-      "options": {
-        "dataLinks": []
-      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "repeat": "instance",
       "repeatDirection": "h",
-      "scopedVars": {
-        "instance": {
-          "selected": false,
-          "text": "10.225.1.1:9093",
-          "value": "10.225.1.1:9093"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "active",
@@ -1055,14 +1035,12 @@
       "datasource": "$datasource",
       "description": "Number of received alerts from Prometheus by status `firing` on positive axis and `resolved` on negative axis.",
       "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 24,
+        "w": 6,
         "x": 0,
         "y": 24
       },
-      "hiddenSeries": false,
       "id": 8,
       "legend": {
         "avg": false,
@@ -1077,22 +1055,12 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "repeat": "instance",
       "repeatDirection": "h",
-      "scopedVars": {
-        "instance": {
-          "selected": false,
-          "text": "10.225.1.1:9093",
-          "value": "10.225.1.1:9093"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "resolved",
@@ -1160,7 +1128,6 @@
     },
     {
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -4244,7 +4211,6 @@
     },
     {
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -5584,7 +5550,6 @@
     },
     {
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -7646,7 +7611,6 @@
     },
     {
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -10131,7 +10095,6 @@
     },
     {
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -11165,8 +11128,8 @@
       "type": "row"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 22,
+  "refresh": "5m",
+  "schemaVersion": 18,
   "style": "dark",
   "tags": [
     "alertmanager",
@@ -11177,8 +11140,9 @@
     "list": [
       {
         "current": {
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "tags": [],
+          "text": "default",
+          "value": "default"
         },
         "hide": 0,
         "includeAll": false,
@@ -11194,11 +11158,7 @@
       },
       {
         "allValue": "",
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "datasource": "$datasource",
         "definition": "query_result(alertmanager_build_info)",
         "hide": 0,
@@ -11250,8 +11210,7 @@
     ]
   },
   "timezone": "",
-  "title": "Prometheus Alertmanager",
-  "uid": "eea-9_siZ",
-  "version": 4
+  "title": "Alertmanager",
+  "uid": "eea-9_sik",
+  "version": 27
 }
-

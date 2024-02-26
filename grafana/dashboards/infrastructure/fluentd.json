@@ -1,10 +1,40 @@
-
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "6.7.3"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    }
+  ],
   "annotations": {
     "list": [
       {
+        "$$hashKey": "object:7",
         "builtIn": 1,
-        "datasource": "Prometheus",
+        "datasource": "${DS_PROMETHEUS}",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -17,12 +47,12 @@
   "editable": true,
   "gnetId": 13042,
   "graphTooltip": 1,
-  "id": 86,
+  "id": null,
   "links": [],
   "panels": [
     {
       "collapsed": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -39,15 +69,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "If you see errors then you probbaly have serious issues with log processing, see https://docs.fluentd.org/buffer#handling-unrecoverable-errors\n\nRetries are normal but should occur only from time to time, otherwise check for network errors or destination is too slow and requires additional tuning per given provider.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -75,13 +98,16 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "$$hashKey": "object:1802",
           "alias": "/Error.*/",
           "color": "#E02F44"
         }
@@ -91,18 +117,16 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(fluentd_output_status_retry_count[5m]))",
+          "expr": "sum(rate(fluentd_output_status_retry_count[1m]))",
           "format": "time_series",
           "hide": false,
-          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Retry rate",
           "refId": "A"
         },
         {
-          "expr": "sum(rate(fluentd_output_status_num_errors[5m]))",
+          "expr": "sum(rate(fluentd_output_status_num_errors[1m]))",
           "format": "time_series",
-          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Error rate",
           "refId": "C"
@@ -128,6 +152,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:1697",
           "format": "ops",
           "label": null,
           "logBase": 1,
@@ -136,6 +161,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:1698",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -154,15 +180,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Input  and output total rates",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -190,8 +209,10 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -201,7 +222,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(fluentd_input_status_num_records_total[5m]))",
+          "expr": "sum(rate(fluentd_input_status_num_records_total[1m]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -210,7 +231,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(rate(fluentd_output_status_write_count[5m]))",
+          "expr": "sum(rate(fluentd_output_status_write_count[1m]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -239,6 +260,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:250",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -247,6 +269,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:251",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -265,15 +288,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "This should not reach 0 otherwise logs are blocked from processing or even dropped",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -301,8 +317,10 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -341,6 +359,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:918",
           "decimals": 0,
           "format": "percent",
           "label": null,
@@ -350,6 +369,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:919",
           "decimals": 0,
           "format": "short",
           "label": null,
@@ -369,15 +389,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "total flush time",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -405,13 +418,16 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "$$hashKey": "object:906",
           "alias": "count",
           "yaxis": 2
         }
@@ -421,7 +437,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(fluentd_output_status_flush_time_count[5m]))",
+          "expr": "sum(rate(fluentd_output_status_flush_time_count[1m]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -430,7 +446,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(rate(fluentd_output_status_slow_flush_count[5m]))",
+          "expr": "sum(rate(fluentd_output_status_slow_flush_count[1m]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -459,6 +475,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:400",
           "decimals": 0,
           "format": "ms",
           "label": null,
@@ -468,6 +485,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:401",
           "decimals": 0,
           "format": "short",
           "label": null,
@@ -487,15 +505,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Current total size of stage and queue buffers.\nfluentd_output_status_buffer_total_bytes",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -523,8 +534,10 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -563,6 +576,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:321",
           "format": "bytes",
           "label": null,
           "logBase": 1,
@@ -571,6 +585,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:322",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -589,14 +604,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "links": []
-        },
-        "overrides": []
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -624,8 +632,10 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -664,6 +674,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:1460",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -672,6 +683,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:1461",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -687,7 +699,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -701,15 +713,8 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_input_status_num_records_total",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -737,8 +742,10 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
           "percentage": false,
-          "pluginVersion": "7.1.5",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -777,6 +784,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -785,6 +793,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -803,15 +812,8 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_input_status_num_records_total",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -839,8 +841,10 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
           "percentage": false,
-          "pluginVersion": "7.1.5",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -879,6 +883,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -887,6 +892,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -905,15 +911,8 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_input_status_num_records_total",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -941,8 +940,10 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
           "percentage": false,
-          "pluginVersion": "7.1.5",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -981,6 +982,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -989,6 +991,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1007,15 +1010,8 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_input_status_num_records_total",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {},
-              "links": []
-            },
-            "overrides": []
-          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1043,8 +1039,10 @@
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
           "percentage": false,
-          "pluginVersion": "7.1.5",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -1083,6 +1081,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1091,6 +1090,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1110,7 +1110,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1124,7 +1124,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_input_status_num_records_total",
           "fill": 1,
           "fillGradient": 0,
@@ -1195,6 +1195,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1203,6 +1204,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1222,7 +1224,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1236,7 +1238,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_buffer_stage_length",
           "fill": 1,
           "fillGradient": 0,
@@ -1307,6 +1309,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1315,6 +1318,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1333,7 +1337,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_buffer_stage_byte_size",
           "fill": 1,
           "fillGradient": 0,
@@ -1404,6 +1408,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "bytes",
               "label": null,
               "logBase": 1,
@@ -1412,6 +1417,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1431,7 +1437,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1445,7 +1451,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "",
           "fill": 1,
           "fillGradient": 0,
@@ -1516,6 +1522,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1524,6 +1531,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1542,7 +1550,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "",
           "fill": 1,
           "fillGradient": 0,
@@ -1613,6 +1621,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "bytes",
               "label": null,
               "logBase": 1,
@@ -1621,6 +1630,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1639,7 +1649,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_buffer_queue_length",
           "fill": 1,
           "fillGradient": 0,
@@ -1710,6 +1720,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1718,6 +1729,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1736,7 +1748,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_queue_byte_size",
           "fill": 1,
           "fillGradient": 0,
@@ -1807,6 +1819,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "bytes",
               "label": null,
               "logBase": 1,
@@ -1815,6 +1828,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1834,7 +1848,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1848,7 +1862,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_buffer_available_space_ratio",
           "fill": 1,
           "fillGradient": 0,
@@ -1919,6 +1933,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "percent",
               "label": null,
               "logBase": 1,
@@ -1927,6 +1942,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -1946,7 +1962,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1960,7 +1976,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_retry_count",
           "fill": 1,
           "fillGradient": 0,
@@ -2031,6 +2047,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2039,6 +2056,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2057,7 +2075,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_emit_records",
           "fill": 1,
           "fillGradient": 0,
@@ -2128,6 +2146,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2136,6 +2155,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2154,7 +2174,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_emit_count",
           "fill": 1,
           "fillGradient": 0,
@@ -2225,6 +2245,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2233,6 +2254,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2251,7 +2273,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_rollback_count",
           "fill": 1,
           "fillGradient": 0,
@@ -2322,6 +2344,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2330,6 +2353,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2348,7 +2372,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_write_count",
           "fill": 1,
           "fillGradient": 0,
@@ -2419,6 +2443,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2427,6 +2452,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2445,7 +2471,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_slow_flush_count",
           "fill": 1,
           "fillGradient": 0,
@@ -2516,6 +2542,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2524,6 +2551,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2542,7 +2570,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_retry_wait",
           "fill": 1,
           "fillGradient": 0,
@@ -2613,6 +2641,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2621,6 +2650,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2639,7 +2669,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_flush_time_count",
           "fill": 1,
           "fillGradient": 0,
@@ -2710,6 +2740,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "ms",
               "label": null,
               "logBase": 1,
@@ -2718,6 +2749,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2737,7 +2769,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2751,7 +2783,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_num_errors",
           "fill": 1,
           "fillGradient": 0,
@@ -2822,6 +2854,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2830,6 +2863,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2849,7 +2883,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2863,7 +2897,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "",
           "fill": 1,
           "fillGradient": 0,
@@ -2934,6 +2968,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2942,6 +2977,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -2960,7 +2996,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_buffer_newest_timekey",
           "fill": 1,
           "fillGradient": 0,
@@ -3031,6 +3067,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3039,6 +3076,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3057,7 +3095,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "description": "fluentd_output_status_buffer_oldest_timekey",
           "fill": 1,
           "fillGradient": 0,
@@ -3128,6 +3166,7 @@
           },
           "yaxes": [
             {
+              "$$hashKey": "object:250",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3136,6 +3175,7 @@
               "show": true
             },
             {
+              "$$hashKey": "object:251",
               "format": "short",
               "label": null,
               "logBase": 1,
@@ -3154,8 +3194,8 @@
       "type": "row"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 26,
+  "refresh": "10s",
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [
     "fluentd",
@@ -3165,7 +3205,7 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -3193,9 +3233,11 @@
       "30d"
     ]
   },
-  "timezone": "",
+  "timezone": "utc",
   "title": "Fluentd 1.x",
   "uid": "bNn5LUtizs3",
-  "version": 4
+  "variables": {
+    "list": []
+  },
+  "version": 25
 }
-
