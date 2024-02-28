@@ -1,10 +1,9 @@
 # Official set of upstream alerts https://github.com/ceph/ceph/blob/octopus/monitoring/prometheus/alerts/ceph_default_alerts.yml
 
-
-
 groups:
-- name: cluster health
+- name: CEPH cluster health
   rules:
+
     - alert: health error
       expr: ceph_health_status == 2
       for: 5m

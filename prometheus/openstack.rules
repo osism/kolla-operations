@@ -1,266 +1,264 @@
-
-
 groups:
 - name: OpenStack
   rules:
-  
-  - alert: OpenStackServiceDown
-    expr: (sum({__name__=~"openstack.+_state", job="openstack_exporter"} == 0) by (hostname, service))
-    for: 1m
-    labels:
-      severity: alert
-    annotations:
-      message: "{{ $labels.service }} at {{ $labels.instance }} is down"
-      description: "OpenStack service {{ $labels.service }} at {{ $labels.instance }} is down"
-  
-  - alert: os_nova_per_cluster_memory_usage
-    expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='MEMORY_MB'}) / sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='MEMORY_MB'})  * 100 > 60
-    for: 1h
-    labels:
-      severity: warning
-    annotations:
-      description: "More than 60% RAM is used in the cluster"
-      message: "More than 60 Percent RAM usage"
-  
-  - alert: os_nova_per_cluster_memory_usage_crit
-    expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='MEMORY_MB'}) / sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='MEMORY_MB'})  * 100 > 80
-    for: 1h
-    labels:
-      severity: critical
-    annotations:
-      description: "More than 80% RAM is used in the cluster"
-      message: "More than 80 Percent RAM usage"
-  
-  - alert: os_nova_per_host_vcpu_limit
-    expr: openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'} * 3 - openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'} < 30
-    for: 15m
-    labels:
-      severity: warning
-    annotations:
-      description: "Less then 30 VCPUs left on {{ $labels.hostname }}"
-      message: "Less then 30 VCPUs left on {{ $labels.hostname }}"
-  
-  - alert: os_nova_per_cluster_vcpu_limit
-    expr: sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'}) * (avg(openstack_placement_resource_allocation_ratio{hostname=~'compute.*', resourcetype='VCPU'})) - sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'}) < 512
-    for: 1h
-    labels:
-      severity: warning
-    annotations:
-      description: "Less then 512 VCPUs left in the Cluster"
-      message: "Less then 512 VCPUs left in the Cluster"
-  
-  - alert: os_nova_per_cluster_vcpu_usage
-    expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'}) / (sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'}) * (avg(openstack_placement_resource_allocation_ratio{hostname=~'compute.*', resourcetype='VCPU'}))) * 100 > 60
-    for: 1h
-    labels:
-      severity: warning
-    annotations:
-      description: 'More than 60 Percent vCPU usage'
-      message: "More than 60 Percent vCPU usage"
-  
-  - alert: os_nova_per_cluster_vcpu_usage_crit
-    expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'}) / (sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'}) * (avg(openstack_placement_resource_allocation_ratio{hostname=~'compute.*', resourcetype='VCPU'}))) * 100 > 80
-    for: 1h
-    labels:
-      severity: critical
-    annotations:
-      description: 'More than 80 Percent vCPU usage'
-      message: "More than 80 Percent vCPU usage"
-  
-  - alert: os_nova_per_host_vcpu_limit_crit
-    expr: openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'} * 3 - openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'} < 5
-    for: 15m
-    labels:
-      severity: critical
-    annotations:
-      description: 'Less then 5 VCPUs left on {{ $labels.hostname }}'
-      message: "Less then 5 VCPUs left on {{ $labels.hostname }}"
-  
-  - alert: os_glance_api_availability
-    expr: openstack_glance_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Glance API is unavailable for over five minutes. This means customers cannot create additional instances.'
-      message: "Glance API is not available"
-  
-  - alert: os_nova_api_availability
-    expr: openstack_nova_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Nova API is unavailable for over five minutes. This means customers cannot create additional instances.'
-      message: "Nova API is not available"
-  
-  - alert: os_keystone_api_availability
-    expr: openstack_identity_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Keystone API is unavailable for over five minutes. This means customers cannot create additional instances.'
-      message: "Keystone API is not available"
-  
-  - alert: os_neutron_api_availability
-    expr: openstack_neutron_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Neutron API is unavailable for over five minutes. This means customers can no longer reserve IP addresses or set firewall rules.'
-      message: "Neutron API is not available"
-  
-  - alert: os_designate_api_availability
-    expr: openstack_designate_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Designate API is unavailable for over five minutes. This means that customers can no longer perform DNS operations.'
-      message: "Designate API is not available"
-  
-  - alert: os_cinder_api_availability
-    expr: openstack_cinder_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Cinder API is unavailable for over five minutes. This means customers cannot create volumes (e.g. for VMs).'
-      message: "Cinder API is not available"
-  
-  - alert: os_octavia_api_availability
-    expr: openstack_loadbalancer_up != 1
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The Octavia API is unavailable for over five minutes. This means customers cannot create load balancers.'
-      message: "Octavia API is not available"
-  
-  - alert: os_nova_instance_limit_near_full
-    expr: 100 - ((openstack_nova_limits_instances_used / openstack_nova_limits_instances_max{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
-    for: 30m
-    labels:
-      severity: warning
-    annotations:
-      description: 'Number of Instances of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80% '
-      message: "Instance Quota of {{ $labels.tenant }} nearly reached"
 
-  - alert: os_nova_vcpu_limit_near_full
-    expr: 100 - ((openstack_nova_limits_vcpus_used / openstack_nova_limits_vcpus_max{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
-    for: 30m
-    labels:
-      severity: warning
-    annotations:
-      description: Number of VCPUs of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80%'
-      message: "VCPU Quota of {{ $labels.tenant }} nearly reached"
-  
-  - alert: os_nova_memory_limit_near_full
-    expr: 100 - ((openstack_nova_limits_memory_used / openstack_nova_limits_memory_max{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
-    for: 30m
-    labels:
-      severity: warning
-    annotations:
-      description: 'Memory of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80%'
-      message: "Memory Quota of {{ $labels.tenant }} nearly reached"
-  
-  - alert: os_nova_instance_limit
-    expr: openstack_nova_limits_instances_max == openstack_nova_limits_instances_used{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"}
-    for: 2h
-    labels:
-      severity: warning
-    annotations:
-      description: 'Number of Instances of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} is on Quota Limit for 2h. '
-      message: "Instance Quota of {{ $labels.tenant }} reached"
-  
-  - alert: os_nova_vcpu_limit
-    expr: openstack_nova_limits_vcpus_max == openstack_nova_limits_vcpus_used{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"}
-    for: 2h
-    labels:
-      severity: warning
-    annotations:
-      description: 'Number of VCPUs of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} is on Quota Limit for 2h.'
-      message: "VCPU Quota of {{ $labels.tenant }} reached"
-  
-  - alert: os_nova_memory_limit
-    expr: openstack_nova_limits_memory_max == openstack_nova_limits_memory_used{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"}
-    for: 2h
-    labels:
-      severity: warning
-    annotations:
-      description: 'Memory of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} is on Quota Limit for 2h.'
-      message: "Memory Quota of {{ $labels.tenant }} reached"
-  
-  - alert: os_nova_storage_limit_near_full
-    expr: 100 - ((openstack_cinder_limits_volume_used_gb / openstack_cinder_limits_volume_max_gb{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
-    for: 30m
-    labels:
-      severity: warning
-    annotations:
-      description: 'Storage Quota of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80%'
-      message: "Storage Quota of {{ $labels.tenant }} nearly reached"
-  
-  - alert: os_near_out_of_floating_IP
-    expr: sum(openstack_neutron_network_ip_availabilities_total{network_name=~"ext.*"} - openstack_neutron_network_ip_availabilities_used{network_name=~"ext.*"}) < 30
-    for: 1h
-    labels:
-      severity: warning
-    annotations:
-      description: 'There are fewer than 15 floating IPs available. Please check whether floating IPs can be released'
-      message: "Less then 15 Floating IPs left"
-  
-  - alert: os_out_of_floating_IP
-    expr: sum(openstack_neutron_network_ip_availabilities_total{network_name=~"ext.*"} - openstack_neutron_network_ip_availabilities_used{network_name=~"ext.*"}) < 10
-    for: 1h
-    labels:
-      severity: critical
-    annotations:
-      description: 'There are fewer than 5 floating IPs available. Please urgently check whether floating IPs can be released'
-      message: "Less then 5 Floating IPs left"
-  
-  - alert: PrometheusTargetMissing
-    expr: up == 0
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: 'The exporter {{ $labels.job }} on {{ $labels.instance }} is down. Please check and, if necessary, restart using docker start/restart.'
-      message: "Prometheus target missing instance {{ $labels.instance }} exporter {{ $labels.job }}"
-  
-  - alert: OpenstackNeutronAgentState
-    expr: openstack_neutron_agent_state == 0
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: '{{ $labels.service }} on {{ $labels.hostname }} is down. Please check. If necessary, restart the container using docker start/restart.'
-      message: "{{ $labels.service }} on {{ $labels.hostname }} down"
-  
-  - alert: OpenstackNovaAgentState
-    expr: openstack_nova_agent_state == 0
-    for: 5m
-    labels:
-      severity: critical
-    annotations:
-      description: '{{ $labels.service }} on {{ $labels.hostname }} is down. Please check. If necessary, restart the container using docker start/restart.'
-      message: "{{ $labels.service }} on {{ $labels.hostname }} is down"
-  
-  - alert: LoadbalancerNotActive
-    expr: openstack_loadbalancer_loadbalancer_status{provisioning_status!="ACTIVE"}
-    for: 15m
-    labels:
-      severity: warning
-    annotations:
-      description: '{{ $labels.name }} in projekt {{ $labels.project_id }} in provisioning_status {{ $labels.provisioning_status }}.'
-      message: "{{ $labels.name }} in project {{ $labels.project_id }} in provisioning_status {{ $labels.provisioning_status }}"
-  
-  - alert: CinderVolumeStuck
-    expr: openstack_cinder_volume_status_counter{status=~"detaching|attaching|deleting|creating|error"} > 0
-    for: 15m
-    labels:
-      severity: warning
-    annotations:
-      description: 'There is at least one volume in state {{ $labels.status }} for longer than 15 minutes.'
-      message: "There is at least one volumes in state {{ $labels.status }} for longer than 15 minutes."
+    - alert: OpenStackServiceDown
+      expr: (sum({__name__=~"openstack.+_state", job="openstack_exporter"} == 0) by (hostname, service))
+      for: 1m
+      labels:
+        severity: alert
+      annotations:
+        message: "{{ $labels.service }} at {{ $labels.instance }} is down"
+        description: "OpenStack service {{ $labels.service }} at {{ $labels.instance }} is down"
+
+    - alert: os_nova_per_cluster_memory_usage
+      expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='MEMORY_MB'}) / sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='MEMORY_MB'})  * 100 > 60
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        description: "More than 60% RAM is used in the cluster"
+        message: "More than 60 Percent RAM usage"
+
+    - alert: os_nova_per_cluster_memory_usage_crit
+      expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='MEMORY_MB'}) / sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='MEMORY_MB'})  * 100 > 80
+      for: 1h
+      labels:
+        severity: critical
+      annotations:
+        description: "More than 80% RAM is used in the cluster"
+        message: "More than 80 Percent RAM usage"
+
+    - alert: os_nova_per_host_vcpu_limit
+      expr: openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'} * 3 - openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'} < 30
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: "Less then 30 VCPUs left on {{ $labels.hostname }}"
+        message: "Less then 30 VCPUs left on {{ $labels.hostname }}"
+
+    - alert: os_nova_per_cluster_vcpu_limit
+      expr: sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'}) * (avg(openstack_placement_resource_allocation_ratio{hostname=~'compute.*', resourcetype='VCPU'})) - sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'}) < 512
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        description: "Less then 512 VCPUs left in the Cluster"
+        message: "Less then 512 VCPUs left in the Cluster"
+
+    - alert: os_nova_per_cluster_vcpu_usage
+      expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'}) / (sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'}) * (avg(openstack_placement_resource_allocation_ratio{hostname=~'compute.*', resourcetype='VCPU'}))) * 100 > 60
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        description: 'More than 60 Percent vCPU usage'
+        message: "More than 60 Percent vCPU usage"
+
+    - alert: os_nova_per_cluster_vcpu_usage_crit
+      expr: sum(openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'}) / (sum(openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'}) * (avg(openstack_placement_resource_allocation_ratio{hostname=~'compute.*', resourcetype='VCPU'}))) * 100 > 80
+      for: 1h
+      labels:
+        severity: critical
+      annotations:
+        description: 'More than 80 Percent vCPU usage'
+        message: "More than 80 Percent vCPU usage"
+
+    - alert: os_nova_per_host_vcpu_limit_crit
+      expr: openstack_placement_resource_total{hostname=~'compute.*', resourcetype='VCPU'} * 3 - openstack_placement_resource_usage{hostname=~'compute.*', resourcetype='VCPU'} < 5
+      for: 15m
+      labels:
+        severity: critical
+      annotations:
+        description: 'Less then 5 VCPUs left on {{ $labels.hostname }}'
+        message: "Less then 5 VCPUs left on {{ $labels.hostname }}"
+
+    - alert: os_glance_api_availability
+      expr: openstack_glance_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Glance API is unavailable for over five minutes. This means customers cannot create additional instances.'
+        message: "Glance API is not available"
+
+    - alert: os_nova_api_availability
+      expr: openstack_nova_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Nova API is unavailable for over five minutes. This means customers cannot create additional instances.'
+        message: "Nova API is not available"
+
+    - alert: os_keystone_api_availability
+      expr: openstack_identity_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Keystone API is unavailable for over five minutes. This means customers cannot create additional instances.'
+        message: "Keystone API is not available"
+
+    - alert: os_neutron_api_availability
+      expr: openstack_neutron_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Neutron API is unavailable for over five minutes. This means customers can no longer reserve IP addresses or set firewall rules.'
+        message: "Neutron API is not available"
+
+    - alert: os_designate_api_availability
+      expr: openstack_designate_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Designate API is unavailable for over five minutes. This means that customers can no longer perform DNS operations.'
+        message: "Designate API is not available"
+
+    - alert: os_cinder_api_availability
+      expr: openstack_cinder_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Cinder API is unavailable for over five minutes. This means customers cannot create volumes (e.g. for VMs).'
+        message: "Cinder API is not available"
+
+    - alert: os_octavia_api_availability
+      expr: openstack_loadbalancer_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The Octavia API is unavailable for over five minutes. This means customers cannot create load balancers.'
+        message: "Octavia API is not available"
+
+    - alert: os_nova_instance_limit_near_full
+      expr: 100 - ((openstack_nova_limits_instances_used / openstack_nova_limits_instances_max{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: 'Number of Instances of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80% '
+        message: "Instance Quota of {{ $labels.tenant }} nearly reached"
+
+    - alert: os_nova_vcpu_limit_near_full
+      expr: 100 - ((openstack_nova_limits_vcpus_used / openstack_nova_limits_vcpus_max{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: Number of VCPUs of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80%'
+        message: "VCPU Quota of {{ $labels.tenant }} nearly reached"
+
+    - alert: os_nova_memory_limit_near_full
+      expr: 100 - ((openstack_nova_limits_memory_used / openstack_nova_limits_memory_max{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: 'Memory of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80%'
+        message: "Memory Quota of {{ $labels.tenant }} nearly reached"
+
+    - alert: os_nova_instance_limit
+      expr: openstack_nova_limits_instances_max == openstack_nova_limits_instances_used{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"}
+      for: 2h
+      labels:
+        severity: warning
+      annotations:
+        description: 'Number of Instances of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} is on Quota Limit for 2h. '
+        message: "Instance Quota of {{ $labels.tenant }} reached"
+
+    - alert: os_nova_vcpu_limit
+      expr: openstack_nova_limits_vcpus_max == openstack_nova_limits_vcpus_used{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"}
+      for: 2h
+      labels:
+        severity: warning
+      annotations:
+        description: 'Number of VCPUs of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} is on Quota Limit for 2h.'
+        message: "VCPU Quota of {{ $labels.tenant }} reached"
+
+    - alert: os_nova_memory_limit
+      expr: openstack_nova_limits_memory_max == openstack_nova_limits_memory_used{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"}
+      for: 2h
+      labels:
+        severity: warning
+      annotations:
+        description: 'Memory of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} is on Quota Limit for 2h.'
+        message: "Memory Quota of {{ $labels.tenant }} reached"
+
+    - alert: os_nova_storage_limit_near_full
+      expr: 100 - ((openstack_cinder_limits_volume_used_gb / openstack_cinder_limits_volume_max_gb{tenant!~"kdtrial.+|kd500884.+|kd500770-demo.+"})*100) < 20
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        description: 'Storage Quota of Tenant {{ $labels.tenant }} with Tenant-ID {{ $labels.tenant_id }} Quota less then 80%'
+        message: "Storage Quota of {{ $labels.tenant }} nearly reached"
+
+    - alert: os_near_out_of_floating_IP
+      expr: sum(openstack_neutron_network_ip_availabilities_total{network_name=~"ext.*"} - openstack_neutron_network_ip_availabilities_used{network_name=~"ext.*"}) < 30
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        description: 'There are fewer than 15 floating IPs available. Please check whether floating IPs can be released'
+        message: "Less then 15 Floating IPs left"
+
+    - alert: os_out_of_floating_IP
+      expr: sum(openstack_neutron_network_ip_availabilities_total{network_name=~"ext.*"} - openstack_neutron_network_ip_availabilities_used{network_name=~"ext.*"}) < 10
+      for: 1h
+      labels:
+        severity: critical
+      annotations:
+        description: 'There are fewer than 5 floating IPs available. Please urgently check whether floating IPs can be released'
+        message: "Less then 5 Floating IPs left"
+
+    - alert: PrometheusTargetMissing
+      expr: up == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'The exporter {{ $labels.job }} on {{ $labels.instance }} is down. Please check and, if necessary, restart using docker start/restart.'
+        message: "Prometheus target missing instance {{ $labels.instance }} exporter {{ $labels.job }}"
+
+    - alert: OpenstackNeutronAgentState
+      expr: openstack_neutron_agent_state == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: '{{ $labels.service }} on {{ $labels.hostname }} is down. Please check. If necessary, restart the container using docker start/restart.'
+        message: "{{ $labels.service }} on {{ $labels.hostname }} down"
+
+    - alert: OpenstackNovaAgentState
+      expr: openstack_nova_agent_state == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: '{{ $labels.service }} on {{ $labels.hostname }} is down. Please check. If necessary, restart the container using docker start/restart.'
+        message: "{{ $labels.service }} on {{ $labels.hostname }} is down"
+
+    - alert: LoadbalancerNotActive
+      expr: openstack_loadbalancer_loadbalancer_status{provisioning_status!="ACTIVE"}
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: '{{ $labels.name }} in projekt {{ $labels.project_id }} in provisioning_status {{ $labels.provisioning_status }}.'
+        message: "{{ $labels.name }} in project {{ $labels.project_id }} in provisioning_status {{ $labels.provisioning_status }}"
+
+    - alert: CinderVolumeStuck
+      expr: openstack_cinder_volume_status_counter{status=~"detaching|attaching|deleting|creating|error"} > 0
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: 'There is at least one volume in state {{ $labels.status }} for longer than 15 minutes.'
+        message: "There is at least one volumes in state {{ $labels.status }} for longer than 15 minutes."
