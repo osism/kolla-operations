@@ -1,9 +1,17 @@
 {% if groups.get('ceph') %}
+{%
+{# ignore hyperconverged setups where hosts are already part of group 'prometheus-node-exporter' #}
+    set port = "9100"
+    set targets = groups['ceph'] | reject('in', groups['prometheus-node-exporter'])
+                                 | map('extract', hostvars, ['ansible_facts', storage_interface, 'ipv4', 'address'])
+                                 | product([port])
+                                 | map('join', ':')
+%}
+{%  if targets | length > 0 %}
 scrape_configs:
   - job_name: ceph_nodeexporter
     static_configs:
       - targets:
-{% for host in groups['ceph'] %}
-        - "{{ api_interface_address }}:9100"
-{% endfor %}
+          {{ targets | to_yaml }}
+{%  endif %}
 {% endif %}
