@@ -1,0 +1,27 @@
+From python:3.12-slim-bookworm
+
+ARG JB_VERSION=v0.6.0
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        ca-certificates \
+        curl \
+        git \
+        jsonnet \
+    && curl --location --output /usr/local/bin/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/${JB_VERSION}/jb-linux-amd64 \
+    && chmod +x /usr/local/bin/jb \
+    && apt-get remove -y \
+        curl \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf \
+      /var/lib/apt/lists/* \
+      /var/tmp/*
+
+COPY files/mixins.py /mixins.py
+
+WORKDIR /srv/.src
+CMD ["/mixins.py"]
+
