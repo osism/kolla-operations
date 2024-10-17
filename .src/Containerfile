@@ -1,0 +1,28 @@
+ARG DEBIAN_VERSION=bookworm
+FROM debian:${DEBIAN_VERSION}
+
+ARG JB_VERSION=v0.6.0
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+COPY files/mixins.sh /mixins.sh
+
+WORKDIR /srv/.src
+CMD ["/mixins.sh"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        ca-certificates \
+        curl \
+        git \
+        jsonnet \
+    && curl --location --output /usr/local/bin/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/${JB_VERSION}/jb-linux-amd64 \
+    && chmod +x /usr/local/bin/jb \
+    && apt-get remove -y \
+        curl \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf \
+      /var/lib/apt/lists/* \
+      /var/tmp/*
