@@ -1,0 +1,46 @@
+---
+- name: Run mixin-ouput-ensure-git-checkin
+  hosts: all
+
+  tasks:
+    - name: Update package cache
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Apply ensure-podman role
+      ansible.builtin.import_role:
+        name: ensure-podman
+
+    - name: Build monitoring-mixin container
+      containers.podman.podman_image:
+        name: mixin-builder
+        path: "./{{ zuul.project.src_dir }}/.src"
+        build:
+          file: "./{{ zuul.project.src_dir }}/.src/Containerfile"
+
+    - name: Install monitoring-mixin dependencies
+      containers.podman.podman_container:
+        command: jb install
+        <<: &mixin_container_options
+          name: mixin-builder
+          image: localhost/mixin-builder
+          detach: false
+          volume:
+            - "./{{ zuul.project.src_dir }}:/srv"
+          rm: true
+
+    - name: Render monitoring-mixin rules / dashboards
+      containers.podman.podman_container:
+        <<: *mixin_container_options
+
+    - name: Check difference between git and generated rules / dashboards
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/git
+          - diff
+          - --exit-code
+        chdir: "./{{ zuul.project.src_dir }}"
+      register: git_diff
+      changed_when: false
+      failed_when: git_diff.rc != 0
