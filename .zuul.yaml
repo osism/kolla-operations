@@ -1,13 +1,19 @@
 ---
+- job:
+    name: mixin-ouput-ensure-git-checkin
+    description: Check for differences between monitoring-mixin output and checked in rules/dashboards
+    run: .src/playbooks/mixin-ouput-ensure-git-checkin.yml
 - project:
     default-branch: main
     merge-mode: squash-merge
     check:
-      jobs:
+      jobs: &jobs
         - yamllint
+        - python-black:
+            files: ^\.src/files/mixins.py$
+        - mixin-ouput-ensure-git-checkin:
+            files: ^\.src/.*$
     gate:
-      jobs:
-        - yamllint
+      jobs: *jobs
     periodic-daily:
-      jobs:
-        - yamllint
+      jobs: *jobs
