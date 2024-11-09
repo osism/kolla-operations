@@ -45,6 +45,26 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v10.0.0"
+        }
+      },
+      "version": "82a19822e54a0a12a51e24dbd48fcde717dc0864",
+      "sum": "xdcrJPJlpkq4+5LpGwN4tPAuheNNLXZjE6tDcyvFjr0="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v11.0.0"
+        }
+      },
+      "version": "82a19822e54a0a12a51e24dbd48fcde717dc0864",
+      "sum": "0BvzR0i4bS4hc2O3xDv6i9m52z7mPrjvqxtcPrGhynA="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
           "subdir": "gen/grafonnet-v11.1.0"
         }
       },
@@ -55,11 +75,31 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "common-lib"
+        }
+      },
+      "version": "a8fc2139d881ae632a8c956eb9dd4b84b24f362e",
+      "sum": "c2Omoqo8FTwR/V3VC+hRN5CEyI0UDD1OyYXnEqwiKLY="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "grafana-builder"
         }
       },
       "version": "a8fc2139d881ae632a8c956eb9dd4b84b24f362e",
       "sum": "yxqWcq/N3E/a/XreeU6EuE6X7kYPnG0AspAQFKOjASo="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "opensearch-mixin"
+        }
+      },
+      "version": "a8fc2139d881ae632a8c956eb9dd4b84b24f362e",
+      "sum": "AK83KBy5roMxhT0taG54ERV20oG9mhaCJA+EHRzuPO4="
     },
     {
       "source": {
@@ -110,6 +150,16 @@
       },
       "version": "d3074b39c38493ebb81514c0ec962b7853ed0162",
       "sum": "dYLcLzGH4yF3qB7OGC/7z4nqeTNjv42L7Q3BENU8XJI="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/yugui/jsonnetunit.git",
+          "subdir": "jsonnetunit"
+        }
+      },
+      "version": "6927c58cae7624a00f368b977ccc477d4f74071f",
+      "sum": "9FFqqln65hooRF0l6rjICDtnTxUlmDj34+sKMh4sjPI="
     }
   ],
   "legacyImports": false
