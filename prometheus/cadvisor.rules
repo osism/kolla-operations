@@ -5,7 +5,10 @@ groups:
   rules:
 
     - alert: ContainerKilled
-      expr: 'time() - container_last_seen > 60'
+      # NOTE: increase timeout because default scrape interval is 60s and cadvisor housekeeping interval is set to scrape interval,
+      # leading to flapping alerts
+      # expr: 'time() - container_last_seen > 60'
+      expr: 'time() - container_last_seen > 120'
       for: 0m
       labels:
         severity: warning
