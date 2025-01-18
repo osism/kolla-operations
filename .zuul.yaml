@@ -9,6 +9,7 @@
     merge-mode: squash-merge
     check:
       jobs: &jobs
+        - ansible-lint
         - yamllint
         - python-black:
             files: ^\.src/files/mixins.py$

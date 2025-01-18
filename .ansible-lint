@@ -1,0 +1,5 @@
+---
+mock_roles:
+  - ensure-podman
+exclude_paths:
+  - prometheus/
