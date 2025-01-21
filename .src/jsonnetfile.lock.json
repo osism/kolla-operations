@@ -44,6 +44,16 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "rabbitmq-mixin"
+        }
+      },
+      "version": "748f8a97f55b2575692d1990138da84c270704fa",
+      "sum": "2vXP+pe5I1tFMehcJdG/K/Vk90l8G+aAiBNspBUbMEI="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/jsonnet-libs/docsonnet.git",
           "subdir": "doc-util"
         }
