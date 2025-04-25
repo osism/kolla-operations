@@ -1,9 +1,0 @@
-{% if groups.get('monitoring') %}
-scrape_configs:
-  - job_name: fluent_exporter
-    static_configs:
-      - targets:
-{% for host in groups['monitoring'] %}
-        - "{{ groups['monitoring'][0] }}:24231"
-{% endfor %}
-{% endif %}
