@@ -13,6 +13,14 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/adinhodovic/blackbox-exporter-mixin.git"
+        }
+      },
+      "version": "main"
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/ceph/ceph.git",
           "subdir": "monitoring/ceph-mixin"
         }

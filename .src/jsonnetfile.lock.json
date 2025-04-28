@@ -4,6 +4,16 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/adinhodovic/blackbox-exporter-mixin.git",
+          "subdir": ""
+        }
+      },
+      "version": "bbc578d63631d320d161bc1968b2362bdc49e339",
+      "sum": "xtZC6Wm4L5ks4fyiDAc2or//vnFs/sartBRYucFeY4s="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/ceph/ceph.git",
           "subdir": "monitoring/ceph-mixin"
         }
