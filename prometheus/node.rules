@@ -279,12 +279,21 @@
     "for": "5m"
     "labels":
       "severity": "warning"
+  - "alert": "NodeSystemdServiceCrashlooping"
+    "annotations":
+      "description": "Systemd service {{ $labels.name }} has being restarted too many times at {{ $labels.instance }} for the last 15 minutes. Please check if service is crash looping."
+      "summary": "Systemd service keeps restaring, possibly crash looping."
+    "expr": |
+      increase(node_systemd_service_restart_total{job="node"}[5m]) > 2
+    "for": "15m"
+    "labels":
+      "severity": "warning"
   - "alert": "NodeBondingDegraded"
     "annotations":
       "description": "Bonding interface {{ $labels.master }} on {{ $labels.instance }} is in degraded state due to one or more slave failures."
-      "summary": "Bonding interface is degraded"
+      "summary": "Bonding interface is degraded."
     "expr": |
-      (node_bonding_slaves - node_bonding_active) != 0
+      (node_bonding_slaves{job="node"} - node_bonding_active{job="node"}) != 0
     "for": "5m"
     "labels":
       "severity": "warning"

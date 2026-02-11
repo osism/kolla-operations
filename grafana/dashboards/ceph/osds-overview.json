@@ -47,28 +47,68 @@
    "graphTooltip": 0,
    "hideControls": false,
    "id": null,
-   "links": [ ],
+   "links": [
+      {
+         "asDropdown": true,
+         "icon": "external link",
+         "includeVars": true,
+         "keepTime": true,
+         "tags": [ ],
+         "targetBlank": false,
+         "title": "Browse Dashboards",
+         "tooltip": "",
+         "type": "dashboards",
+         "url": ""
+      }
+   ],
    "panels": [
       {
-         "aliasColors": {
-            "@95%ile": "#e0752d"
-         },
-         "bars": false,
-         "dashLength": 10,
-         "dashes": false,
          "datasource": "$datasource",
          "description": "",
          "fieldConfig": {
             "defaults": {
+               "color": {
+                  "mode": "palette-classic"
+               },
                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
                   "fillOpacity": 8,
-                  "showPoints": "never"
+                  "gradientMode": "none",
+                  "hideFrom": {
+                     "legend": false,
+                     "tooltip": false,
+                     "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 0,
+                  "pointSize": 0,
+                  "scaleDistribution": {
+                     "type": "linear"
+                  },
+                  "showPoints": "",
+                  "spanNulls": true,
+                  "stacking": {
+                     "group": "A",
+                     "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                     "mode": "off"
+                  }
+               },
+               "mappings": [ ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [ ]
                },
                "unit": "ms"
-            }
+            },
+            "overrides": [ ]
          },
-         "fill": 1,
-         "fillGradient": 0,
          "gridPos": {
             "h": 8,
             "w": 8,
@@ -76,89 +116,45 @@
             "y": 0
          },
          "id": 2,
-         "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "total": false,
-            "values": false
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list",
+               "placement": "bottom",
+               "showLegend": true
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "none"
+            }
          },
-         "lines": true,
-         "linewidth": 1,
-         "links": [ ],
-         "nullPointMode": "null",
-         "percentage": false,
-         "pointradius": 5,
-         "points": false,
-         "renderer": "flot",
-         "repeat": null,
+         "pluginVersion": "9.1.3",
          "seriesOverrides": [ ],
-         "spaceLength": 10,
-         "stack": false,
-         "steppedLine": false,
          "targets": [
             {
-               "expr": "avg (\n  rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n    on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster\", }[$__rate_interval]) * 1000\n)\n",
+               "expr": "avg(\n  rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n  on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) * 1000\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "AVG read",
                "refId": "A"
             },
             {
-               "expr": "max(\n  rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n  on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster\", }[$__rate_interval]) * 1000\n)\n",
+               "expr": "max(\n  rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n  on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) * 1000\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "MAX read",
                "refId": "B"
             },
             {
-               "expr": "quantile(0.95,\n  (\n    rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n      on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster\", }[$__rate_interval])\n      * 1000\n  )\n)\n",
+               "expr": "quantile(0.95,\n  (\n    rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n    on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) * 1000\n  )\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "@95%ile",
                "refId": "C"
             }
          ],
-         "thresholds": [ ],
-         "timeFrom": null,
-         "timeShift": null,
          "title": "OSD Read Latencies",
-         "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-         },
-         "type": "timeseries",
-         "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [ ]
-         },
-         "yaxes": [
-            {
-               "format": "ms",
-               "label": null,
-               "logBase": 1,
-               "max": null,
-               "min": "0",
-               "show": true
-            },
-            {
-               "format": "short",
-               "label": null,
-               "logBase": 1,
-               "max": null,
-               "min": "0",
-               "show": true
-            }
-         ]
+         "type": "timeseries"
       },
       {
          "columns": [ ],
@@ -260,10 +256,10 @@
             "showHeader": true
          },
          "pluginVersion": "10.4.0",
-         "styles": "",
+         "styles": [ ],
          "targets": [
             {
-               "expr": "topk(10,\n  (sort(\n    (\n      rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n        on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster\", }[$__rate_interval]) *\n        1000\n    )\n  ))\n)\n",
+               "expr": "topk(10,\n  (sort(\n    (\n      rate(ceph_osd_op_r_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n        on (ceph_daemon) rate(ceph_osd_op_r_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) *\n        1000\n    )\n  ))\n)\n",
                "format": "table",
                "instant": true,
                "intervalFactor": 1,
@@ -297,25 +293,52 @@
          "type": "table"
       },
       {
-         "aliasColors": {
-            "@95%ile write": "#e0752d"
-         },
-         "bars": false,
-         "dashLength": 10,
-         "dashes": false,
          "datasource": "$datasource",
          "description": "",
          "fieldConfig": {
             "defaults": {
+               "color": {
+                  "mode": "palette-classic"
+               },
                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
                   "fillOpacity": 8,
-                  "showPoints": "never"
+                  "gradientMode": "none",
+                  "hideFrom": {
+                     "legend": false,
+                     "tooltip": false,
+                     "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 0,
+                  "pointSize": 0,
+                  "scaleDistribution": {
+                     "type": "linear"
+                  },
+                  "showPoints": "",
+                  "spanNulls": true,
+                  "stacking": {
+                     "group": "A",
+                     "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                     "mode": "off"
+                  }
+               },
+               "mappings": [ ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [ ]
                },
                "unit": "ms"
-            }
+            },
+            "overrides": [ ]
          },
-         "fill": 1,
-         "fillGradient": 0,
          "gridPos": {
             "h": 8,
             "w": 8,
@@ -323,89 +346,45 @@
             "y": 0
          },
          "id": 4,
-         "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "total": false,
-            "values": false
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list",
+               "placement": "bottom",
+               "showLegend": true
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "none"
+            }
          },
-         "lines": true,
-         "linewidth": 1,
-         "links": [ ],
-         "nullPointMode": "null",
-         "percentage": false,
-         "pointradius": 5,
-         "points": false,
-         "renderer": "flot",
-         "repeat": null,
+         "pluginVersion": "9.1.3",
          "seriesOverrides": [ ],
-         "spaceLength": 10,
-         "stack": false,
-         "steppedLine": false,
          "targets": [
             {
-               "expr": "avg(\n  rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n    on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster\", }[$__rate_interval])\n    * 1000\n)\n",
+               "expr": "avg(\n  rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n  on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) * 1000\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "AVG write",
                "refId": "A"
             },
             {
-               "expr": "max(\n  rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n    on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster\", }[$__rate_interval]) *\n    1000\n)\n",
+               "expr": "max(\n  rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n  on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) * 1000\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "MAX write",
                "refId": "B"
             },
             {
-               "expr": "quantile(0.95, (\n  rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n    on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster\", }[$__rate_interval]) *\n    1000\n))\n",
+               "expr": "quantile(0.95,\n  (\n    rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n    on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) * 1000\n  )\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "@95%ile write",
                "refId": "C"
             }
          ],
-         "thresholds": [ ],
-         "timeFrom": null,
-         "timeShift": null,
          "title": "OSD Write Latencies",
-         "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-         },
-         "type": "timeseries",
-         "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [ ]
-         },
-         "yaxes": [
-            {
-               "format": "ms",
-               "label": null,
-               "logBase": 1,
-               "max": null,
-               "min": "0",
-               "show": true
-            },
-            {
-               "format": "short",
-               "label": null,
-               "logBase": 1,
-               "max": null,
-               "min": "0",
-               "show": true
-            }
-         ]
+         "type": "timeseries"
       },
       {
          "columns": [ ],
@@ -542,10 +521,10 @@
             "showHeader": true
          },
          "pluginVersion": "10.4.0",
-         "styles": "",
+         "styles": [ ],
          "targets": [
             {
-               "expr": "topk(10,\n  (sort(\n    (rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster\", }[$__rate_interval]) /\n      on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster\", }[$__rate_interval]) *\n      1000)\n  ))\n)\n",
+               "expr": "topk(10,\n  (sort(\n    (rate(ceph_osd_op_w_latency_sum{cluster=~\"$cluster|\", }[$__rate_interval]) /\n      on (ceph_daemon) rate(ceph_osd_op_w_latency_count{cluster=~\"$cluster|\", }[$__rate_interval]) *\n      1000)\n  ))\n)\n",
                "format": "table",
                "instant": true,
                "intervalFactor": 1,
@@ -627,7 +606,7 @@
          },
          "targets": [
             {
-               "expr": "count by (device_class) (ceph_osd_metadata{cluster=~\"$cluster\", })",
+               "expr": "count by (device_class) (ceph_osd_metadata{cluster=~\"$cluster|\", })",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "{{device_class}}",
@@ -686,14 +665,14 @@
          },
          "targets": [
             {
-               "expr": "count(ceph_bluefs_wal_total_bytes{cluster=~\"$cluster\", })",
+               "expr": "count(ceph_bluefs_wal_total_bytes{cluster=~\"$cluster|\", })",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "bluestore",
                "refId": "A"
             },
             {
-               "expr": "absent(ceph_bluefs_wal_total_bytes{cluster=~\"$cluster\", }) * count(ceph_osd_metadata{cluster=~\"$cluster\", })",
+               "expr": "absent(ceph_bluefs_wal_total_bytes{cluster=~\"$cluster|\", }) * count(ceph_osd_metadata{cluster=~\"$cluster|\", })",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "filestore",
@@ -752,63 +731,63 @@
          },
          "targets": [
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } < 1099511627776)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } < 1099511627776)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<1TB",
                "refId": "A"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 1099511627776 < 2199023255552)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 1099511627776 < 2199023255552)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<2TB",
                "refId": "B"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 2199023255552 < 3298534883328)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 2199023255552 < 3298534883328)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<3TB",
                "refId": "C"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 3298534883328 < 4398046511104)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 3298534883328 < 4398046511104)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<4TB",
                "refId": "D"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 4398046511104 < 6597069766656)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 4398046511104 < 6597069766656)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<6TB",
                "refId": "E"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 6597069766656 < 8796093022208)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 6597069766656 < 8796093022208)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<8TB",
                "refId": "F"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 8796093022208 < 10995116277760)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 8796093022208 < 10995116277760)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<10TB",
                "refId": "G"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 10995116277760 < 13194139533312)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 10995116277760 < 13194139533312)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<12TB",
                "refId": "H"
             },
             {
-               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster\", } >= 13194139533312)",
+               "expr": "count(ceph_osd_stat_bytes{cluster=~\"$cluster|\", } >= 13194139533312)",
                "format": "time_series",
                "intervalFactor": 2,
                "legendFormat": "<12TB+",
@@ -869,7 +848,7 @@
          "steppedLine": false,
          "targets": [
             {
-               "expr": "ceph_osd_numpg{cluster=~\"$cluster\", }",
+               "expr": "ceph_osd_numpg{cluster=~\"$cluster|\", }",
                "format": "time_series",
                "instant": true,
                "intervalFactor": 1,
@@ -975,7 +954,7 @@
          "tableColumn": "",
          "targets": [
             {
-               "expr": "sum(ceph_bluestore_onode_hits{cluster=~\"$cluster\", }) / (\n  sum(ceph_bluestore_onode_hits{cluster=~\"$cluster\", }) +\n  sum(ceph_bluestore_onode_misses{cluster=~\"$cluster\", })\n)\n",
+               "expr": "sum(ceph_bluestore_onode_hits{cluster=~\"$cluster|\", }) / (\n  sum(ceph_bluestore_onode_hits{cluster=~\"$cluster|\", }) +\n  sum(ceph_bluestore_onode_misses{cluster=~\"$cluster|\", })\n)\n",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "",
@@ -1015,23 +994,52 @@
          "type": "row"
       },
       {
-         "aliasColors": { },
-         "bars": false,
-         "dashLength": 10,
-         "dashes": false,
          "datasource": "$datasource",
-         "description": "Show the read/write workload profile overtime",
+         "description": "",
          "fieldConfig": {
             "defaults": {
+               "color": {
+                  "mode": "palette-classic"
+               },
                "custom": {
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
                   "fillOpacity": 8,
-                  "showPoints": "never"
+                  "gradientMode": "none",
+                  "hideFrom": {
+                     "legend": false,
+                     "tooltip": false,
+                     "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 0,
+                  "pointSize": 0,
+                  "scaleDistribution": {
+                     "type": "linear"
+                  },
+                  "showPoints": "",
+                  "spanNulls": true,
+                  "stacking": {
+                     "group": "A",
+                     "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                     "mode": "off"
+                  }
+               },
+               "mappings": [ ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [ ]
                },
                "unit": "short"
-            }
+            },
+            "overrides": [ ]
          },
-         "fill": 1,
-         "fillGradient": 0,
          "gridPos": {
             "h": 8,
             "w": 24,
@@ -1039,82 +1047,38 @@
             "y": 17
          },
          "id": 12,
-         "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "total": false,
-            "values": false
+         "options": {
+            "legend": {
+               "calcs": [ ],
+               "displayMode": "list",
+               "placement": "bottom",
+               "showLegend": true
+            },
+            "tooltip": {
+               "mode": "multi",
+               "sort": "none"
+            }
          },
-         "lines": true,
-         "linewidth": 1,
-         "links": [ ],
-         "nullPointMode": "null",
-         "percentage": false,
-         "pointradius": 5,
-         "points": false,
-         "renderer": "flot",
-         "repeat": null,
+         "pluginVersion": "9.1.3",
          "seriesOverrides": [ ],
-         "spaceLength": 10,
-         "stack": false,
-         "steppedLine": false,
          "targets": [
             {
-               "expr": "round(sum(rate(ceph_pool_rd{cluster=~\"$cluster\", }[$__rate_interval])))",
+               "expr": "round(sum(rate(ceph_pool_rd{cluster=~\"$cluster|\", }[$__rate_interval])))",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "Reads",
                "refId": "A"
             },
             {
-               "expr": "round(sum(rate(ceph_pool_wr{cluster=~\"$cluster\", }[$__rate_interval])))",
+               "expr": "round(sum(rate(ceph_pool_wr{cluster=~\"$cluster|\", }[$__rate_interval])))",
                "format": "time_series",
                "intervalFactor": 1,
                "legendFormat": "Writes",
                "refId": "B"
             }
          ],
-         "thresholds": [ ],
-         "timeFrom": null,
-         "timeShift": null,
          "title": "Read/Write Profile",
-         "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-         },
-         "type": "timeseries",
-         "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [ ]
-         },
-         "yaxes": [
-            {
-               "format": "short",
-               "label": null,
-               "logBase": 1,
-               "max": null,
-               "min": null,
-               "show": true
-            },
-            {
-               "format": "short",
-               "label": null,
-               "logBase": 1,
-               "max": null,
-               "min": null,
-               "show": true
-            }
-         ]
+         "type": "timeseries"
       },
       {
          "columns": [ ],
@@ -1217,7 +1181,7 @@
             "showHeader": true
          },
          "pluginVersion": "10.4.0",
-         "styles": "",
+         "styles": [ ],
          "targets": [
             {
                "expr": "topk(10,\n  (ceph_daemon_health_metrics{type=\"SLOW_OPS\", ceph_daemon=~\"osd.*\"})\n)\n",
@@ -1333,7 +1297,7 @@
       ]
    },
    "timezone": "",
-   "title": "OSD Overview",
+   "title": "Ceph OSDs - Overview",
    "uid": "lo02I1Aiz",
    "version": 0
 }
