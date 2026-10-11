@@ -8,9 +8,12 @@
       ansible.builtin.apt:
         update_cache: true
 
+    # The podman tasks below run as the unprivileged zuul user.
     - name: Apply ensure-podman role
       ansible.builtin.import_role:
         name: ensure-podman
+      vars:
+        ensure_podman_rootless: true
 
     - name: Build monitoring-mixin container
       containers.podman.podman_image:
